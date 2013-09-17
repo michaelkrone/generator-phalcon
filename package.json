@@ -1,6 +1,6 @@
 {
   "name": "generator-phalcon",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Let Yeoman generate a new Phalcon multi module project.",
   "keywords": [
     "yeoman-generator"
@@ -22,8 +22,7 @@
   },
   "dependencies": {
     "yeoman-generator": "~0.13.0",
-    "colors": "latest",
-    "grunt-replace": "latest"
+    "colors": "latest"
   },
   "devDependencies": {
     "mocha": "~1.12.0"
