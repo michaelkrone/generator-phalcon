@@ -5,7 +5,8 @@ namespace <%= project.namespace %>\<%= module.namespace %>;
 use Phalcon\Loader,
 	Phalcon\Mvc\View,
 	Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter,
-	Phalcon\Mvc\ModuleDefinitionInterface;
+	Phalcon\Mvc\ModuleDefinitionInterface,
+	Phalcon\Mvc\Router\Group;
 
 class Module implements ModuleDefinitionInterface
 {
@@ -18,6 +19,7 @@ class Module implements ModuleDefinitionInterface
 		$loader = new Loader();
 
 		$loader->registerNamespaces(array(
+			'<%= project.namespace %>\<%= module.namespace %>\Config' => __DIR__ . '/config/',
 			'<%= project.namespace %>\<%= module.namespace %>\Controllers' => __DIR__ . '/controllers/',
 			'<%= project.namespace %>\<%= module.namespace %>\Models' => __DIR__ . '/models/',
 		));
@@ -48,6 +50,11 @@ class Module implements ModuleDefinitionInterface
         	);
 			return $view;
 		};
+
+		/**
+		 * Register module specific routes
+		 */
+		$di['router']->mount(new Config\ModuleRoutes());
 
 		/**
 		 * Database connection is created based in the parameters defined in the configuration file

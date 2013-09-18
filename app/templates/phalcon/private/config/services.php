@@ -21,7 +21,7 @@ $di = new FactoryDefault();
 /**
  * Registering a router
  */
-$di['router'] = function()
+$di['router'] = function() use ($application)
 {
 	require __DIR__ . '/routes.php';
 	return $router;

@@ -6,15 +6,17 @@ error_reporting(E_ALL);
 
 try {
 
+	
+	/**
+	 * Get new application instance
+	 */
+	$application = new Application();
+
 	/**
 	 * Include services
 	 */
 	require __DIR__ . '/../private/config/services.php';
 
-	/**
-	 * Handle the request
-	 */
-	$application = new Application();
 
 	/**
 	 * Assign the DI
@@ -26,10 +28,13 @@ try {
 	 */
 	require __DIR__ . '/../private/config/modules.php';
 
+	/**
+	 * Handle the request
+	 */
 	echo $application->handle()->getContent();
 
 } catch (Phalcon\Exception $e) {
-	echo $e->getMessage();
+	echo 'Phalcon\Exception: ', $e->getMessage();
 } catch (PDOException $e){
-	echo $e->getMessage();
+	echo 'PDOException: ', $e->getMessage();
 }
