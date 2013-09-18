@@ -7,5 +7,7 @@ return new \Phalcon\Config(array(
 		'username' => 'root',
 		'password' => '',
 		'dbname'     => 'test',
+		'persistent' => true,
+		'charset' => 'utf8'
 	)
 ));

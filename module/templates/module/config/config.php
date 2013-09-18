@@ -6,11 +6,8 @@ return new \Phalcon\Config(array(
 		'host'     => 'localhost',
 		'username' => 'root',
 		'password' => '',
-		'dbname'     => 'test',
-	),
-	'application' => array(
-		'controllersDir' => __DIR__ . '/../controllers/',
-		'modelsDir' => __DIR__ . '/../models/',
-		'viewsDir' => __DIR__ . '/../views/'
+		'dbname' => 'test',
+		'persistent' => true,
+		'charset' => 'utf8'
 	)
 ));

@@ -19,9 +19,14 @@ $config = include __DIR__ . '/config.php';
 $di = new FactoryDefault();
 
 /**
+ * Register the config as shared service
+ */
+$di->setShared('config', $config);
+
+/**
  * Registering a router
  */
-$di['router'] = function() use ($application)
+$di['router'] = function () use ($application)
 {
 	require __DIR__ . '/routes.php';
 	return $router;
@@ -30,7 +35,7 @@ $di['router'] = function() use ($application)
 /**
  * The URL component is used to generate all kind of urls in the application
  */
-$di['url'] = function() use ($config)
+$di['url'] = function () use ($config)
 {
 	$url = new UrlResolver();
 	$url->setBaseUri($config->application->baseUri);
@@ -40,9 +45,23 @@ $di['url'] = function() use ($config)
 /**
  * Start the session the first time some component request the session service
  */
-$di['session'] = function()
+$di['session'] = function ()
 {
 	$session = new SessionAdapter();
 	$session->start();
 	return $session;
+};
+
+/**
+ * If the configuration specify the use of metadata adapter use it or use memory otherwise
+ */
+$di['modelsMetadata'] = function () use ($config)
+{
+	if (isset($config->models->metadata)) {
+		$metaDataConfig = $config->models->metadata;
+		$metadataAdapter = 'Phalcon\Mvc\Model\Metadata\\' . $metaDataConfig->adapter;
+		return new $metadataAdapter();
+	} else {
+		return new \Phalcon\Mvc\Model\Metadata\Memory();
+	}
 };

@@ -2,6 +2,9 @@
 
 return new \Phalcon\Config(array(
 	'application' => array(
-		'baseUri' => '<%= project.rewritePath %>'
+		'baseUri' => '<%= project.rewritePath %>',
+		'models' => array(
+			'metadata' => array('adapter' => 'Apc')
+		)
 	)
 ));

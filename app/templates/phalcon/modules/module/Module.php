@@ -37,7 +37,7 @@ class Module implements ModuleDefinitionInterface
 		/**
 		 * Read configuration
 		 */
-		$config = include __DIR__ . '/config/config.php';
+		$config = $di->getShared('config');
 
 		/**
 		 * Setting up the view component

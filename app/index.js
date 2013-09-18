@@ -10,6 +10,11 @@ var PhalconGenerator = module.exports = function PhalconGenerator(args, options,
 
   this.on('end', function () {
     this.installDependencies({ skipInstall: options['skip-install'] });
+    console.log(
+      'Please make sure this project is located in the ' +
+      (this.project.slug).yellow +
+      ' directory inside your webserver root!'
+    );
   });
 
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
