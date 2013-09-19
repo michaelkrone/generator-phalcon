@@ -4,6 +4,7 @@ namespace <%= project.namespace %>\<%= module.namespace %>;
 
 use Phalcon\Loader,
 	Phalcon\Mvc\View,
+	Phalcon\Mvc\Dispatcher,
 	Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter,
 	Phalcon\Mvc\ModuleDefinitionInterface,
 	Phalcon\Mvc\Router\Group;
@@ -42,13 +43,34 @@ class Module implements ModuleDefinitionInterface
 		/**
 		 * Setting up the view component
 		 */
-		$di['view'] = function() {
+		$di['view'] = function()
+		{
 			$view = new View();
 			$view->setViewsDir(<%= module.viewsDir %>);
 			$view->registerEngines(
 				array('.html' => 'Phalcon\Mvc\View\Engine\Php')
         	);
 			return $view;
+		};
+
+		/**
+		 * The URL component is used to generate all kind of urls in the application
+		 */
+		$di['url'] = function () use ($appConfig)
+		{
+			$url = new UrlResolver();
+			$url->setBaseUri($config->application->baseUri . '<%= module.slug %>');
+			return $url;
+		};
+
+		/**
+		 * Module specific dispatcher
+		 */
+		$di['dispatcher'] = function ()
+		{
+        	$dispatcher = new Dispatcher();
+			$dispatcher->setDefaultNamespace('<%= project.namespace %>\<%= module.namespace %>\\');
+			return $dispatcher;
 		};
 
 		/**
@@ -59,7 +81,8 @@ class Module implements ModuleDefinitionInterface
 		/**
 		 * Database connection is created based in the parameters defined in the configuration file
 		 */
-		$di['db'] = function() use ($appConfig) {
+		$di['db'] = function() use ($config)
+		{
 			return new DbAdapter(array(
 				'host' => $appConfig->database->host,
 				'username' => $appConfig->database->username,
