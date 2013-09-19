@@ -1,4 +1,4 @@
-# generator-phalcon [![Build Status](https://secure.travis-ci.org/michaelkrone/generator-phalcon.png?branch=master)](https://travis-ci.org/michaelkrone/generator-phalcon)
+# generator-phalcon 
 
 A generator for [Yeoman](http://yeoman.io).
 
@@ -34,6 +34,16 @@ Finally, initiate the generator:
 ```
 $ yo phalcon
 ```
+
+You will be asked some questions about your application. Finally you have a working multi-module application set up.
+
+### Module Subgenerator
+
+```
+$ yo phalcon:module AdditionalModule
+```
+
+This will kickstart the module generator which will include a new module in your project. This works for every project created by the generator-phalcon generator.
 
 ### Getting To Know Yeoman
 
