@@ -35,9 +35,9 @@ class Module implements ModuleDefinitionInterface
 	public function registerServices($di)
 	{
 		/**
-		 * Read configuration
+		 * Read configurations
 		 */
-		$config = $di->getShared('config');
+		$appConfig = $di->getShared('config');
 
 		/**
 		 * Setting up the view component
@@ -61,10 +61,10 @@ class Module implements ModuleDefinitionInterface
 		 */
 		$di['db'] = function() use ($config) {
 			return new DbAdapter(array(
-				'host' => $config->database->host,
-				'username' => $config->database->username,
-				'password' => $config->database->password,
-				'dbname' => $config->database->name
+				'host' => $appConfig->database->host,
+				'username' => $appConfig->database->username,
+				'password' => $appConfig->database->password,
+				'dbname' => $appConfig->database->name
 			));
 		};
 	}

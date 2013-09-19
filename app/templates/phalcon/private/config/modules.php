@@ -5,7 +5,7 @@
  * Register application modules
  */
 $application->registerModules(array(
-	'<%= module.namespace %>' => array(
+	'<%= module.slug %>' => array(
 		'className' => '<%= project.namespace %>\<%= module.namespace %>\Module',
 		'path' => __DIR__ . '/../modules/<%= module.slug %>/Module.php'
 	)

@@ -26,7 +26,7 @@ $di->setShared('config', $config);
 /**
  * Registering a router
  */
-$di['router'] = function () use ($application)
+$di['router'] = function ()
 {
 	require __DIR__ . '/routes.php';
 	return $router;
@@ -57,11 +57,7 @@ $di['session'] = function ()
  */
 $di['modelsMetadata'] = function () use ($config)
 {
-	if (isset($config->models->metadata)) {
-		$metaDataConfig = $config->models->metadata;
-		$metadataAdapter = 'Phalcon\Mvc\Model\Metadata\\' . $metaDataConfig->adapter;
-		return new $metadataAdapter();
-	} else {
-		return new \Phalcon\Mvc\Model\Metadata\Memory();
-	}
+	$metaDataConfig = $config->application->models->metadata;
+	$metadataAdapter = 'Phalcon\Mvc\Model\Metadata\\' . $metaDataConfig->adapter;
+	return new $metadataAdapter();
 };

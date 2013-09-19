@@ -21,7 +21,7 @@ var ModuleGenerator = module.exports = function ModuleGenerator(args, options, c
 
 util.inherits(ModuleGenerator, yeoman.generators.NamedBase);
 
-ModuleGenerator.prototype.askFor = function askFor() 
+ModuleGenerator.prototype.askFor = function askFor()
 {
 	var cb = this.async();
 	var you = ' his dudeness '.blue;
@@ -81,10 +81,13 @@ ModuleGenerator.prototype.files = function files()
 	this.addModuleConfig();
 };
 
+/*
+ * Add a module config entry to the application wide  modules configuration.
+ */
 ModuleGenerator.prototype.addModuleConfig = function addModuleConfig()
 {
 	 var file = 'private/config/modules.php'
-	 var moduleString = "\n\t,'" + this.module.namespace + "' => array(\n\t\t" +
+	 var moduleString = "\n\t,'" + this.module.slug + "' => array(\n\t\t" +
 			"'className' => '" + this.project.namespace + "\\" + this.module.namespace + "\\Module',\n\t\t" +
 			"'path' => __DIR__ . '/../modules/" + this.module.slug + "/Module.php'\n\t" +
 		")\n" +

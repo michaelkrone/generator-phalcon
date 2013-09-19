@@ -34,7 +34,7 @@ try {
 	echo $application->handle()->getContent();
 
 } catch (Phalcon\Exception $e) {
-	echo 'Phalcon\Exception: ', $e->getMessage();
-} catch (PDOException $e){
-	echo 'PDOException: ', $e->getMessage();
+	echo 'Phalcon\Exception: ', $e->getMessage(), $e->getTraceAsString();
+} catch (PDOException $e) {
+	echo 'PDOException: ', $e->getMessage(), $e->getTraceAsString();
 }
