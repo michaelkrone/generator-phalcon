@@ -8,8 +8,8 @@
   "homepage": "https://github.com/michaelkrone/generator-phalcon",
   "bugs": "https://github.com/michaelkrone/generator-phalcon/issues",
   "author": {
-    "name": "",
-    "email": "",
+    "name": "Michael Krone",
+    "email": "michael.krone@live.de",
     "url": "https://github.com/michaelkrone"
   },
   "main": "app/index.js",
