@@ -23,6 +23,7 @@ class Module implements ModuleDefinitionInterface
 			'<%= project.namespace %>\<%= module.namespace %>\Config' => __DIR__ . '/config/',
 			'<%= project.namespace %>\<%= module.namespace %>\Controllers' => __DIR__ . '/controllers/',
 			'<%= project.namespace %>\<%= module.namespace %>\Models' => __DIR__ . '/models/',
+			'<%= project.namespace %>\<%= module.namespace %>\Library' => __DIR__ . '/lib/',
 		));
 
 		$loader->register();
@@ -43,52 +44,48 @@ class Module implements ModuleDefinitionInterface
 		/**
 		 * Setting up the view component
 		 */
-		$di['view'] = function()
-		{
+		$di->set('view', function() {
 			$view = new View();
 			$view->setViewsDir(<%= module.viewsDir %>);
 			$view->registerEngines(
 				array('.html' => 'Phalcon\Mvc\View\Engine\Php')
         	);
 			return $view;
-		};
+		});
 
 		/**
 		 * The URL component is used to generate all kind of urls in the application
 		 */
-		$di['url'] = function () use ($appConfig)
-		{
+		$di->set('url', function () use ($appConfig) {
 			$url = new UrlResolver();
-			$url->setBaseUri($config->application->baseUri . '<%= module.slug %>');
+			$url->setBaseUri($config->application->baseUri);
 			return $url;
-		};
+		});
 
 		/**
 		 * Module specific dispatcher
 		 */
-		$di['dispatcher'] = function ()
-		{
+		$di->set('dispatcher', function () {
         	$dispatcher = new Dispatcher();
 			$dispatcher->setDefaultNamespace('<%= project.namespace %>\<%= module.namespace %>\\');
 			return $dispatcher;
-		};
+		});
 
 		/**
 		 * Register module specific routes
 		 */
-		$di['router']->mount(new Config\ModuleRoutes());
+		$di->get('router')->mount(new Config\ModuleRoutes());
 
 		/**
 		 * Database connection is created based in the parameters defined in the configuration file
 		 */
-		$di['db'] = function() use ($config)
-		{
+		$di->set('db', function() use ($appConfig) {
 			return new DbAdapter(array(
 				'host' => $appConfig->database->host,
 				'username' => $appConfig->database->username,
 				'password' => $appConfig->database->password,
 				'dbname' => $appConfig->database->name
 			));
-		};
+		});
 	}
 }
