@@ -74,7 +74,7 @@ class Module implements ModuleDefinitionInterface
 		/**
 		 * Register module specific routes
 		 */
-		$di->get('router')->mount(new Config\ModuleRoutes());
+		$di->getShared('router')->mount(new Config\ModuleRoutes());
 
 		/**
 		 * Database connection is created based in the parameters defined in the configuration file

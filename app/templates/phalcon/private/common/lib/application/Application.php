@@ -18,7 +18,7 @@ class Application extends \Phalcon\Mvc\Application
 		/**
 		 * The application wide configuration
 		 */
-		$config = include __DIR__ . '/../../../config/config.php';
+		$config = require __DIR__ . '/../../../config/config.php';
 
 		$di->set('config', $config);
 

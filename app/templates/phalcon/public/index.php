@@ -1,12 +1,10 @@
 <?php
 
 /**
- * We're a registering the root library to instantiate the Application class
+ * We're not registering the root library to instantiate the Application class,
+ * just include it for performance reasons (can be cached by APC, no object creation etc.)
  */
- $loader = new \Phalcon\Loader();
- $loader->registerNamespaces(
- 	['<%= project.namespace %>\Application' => __DIR__ . '/../private/common/lib/application/']
- )->register();
+include __DIR__ . '/../private/common/lib/application/Application.php';
  
 try {
 	$application = new <%= project.namespace %>\Application\Application();

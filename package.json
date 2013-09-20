@@ -1,6 +1,6 @@
 {
   "name": "generator-phalcon",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Let Yeoman generate a new Phalcon multi module project.",
   "keywords": [
     "yeoman-generator"
