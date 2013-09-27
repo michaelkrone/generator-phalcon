@@ -16,13 +16,13 @@ var PhalconGenerator = module.exports = function PhalconGenerator(args, options,
       ' directory under your webserver root!'
     );
   });
-
+ 
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 };
 
 util.inherits(PhalconGenerator, yeoman.generators.Base);
 
-PhalconGenerator.prototype.askFor = function askFor() 
+PhalconGenerator.prototype.askFor = function askFor()
 {
   var cb = this.async();
   var you = ' you ';

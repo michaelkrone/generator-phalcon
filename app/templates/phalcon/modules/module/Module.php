@@ -28,7 +28,7 @@ class Module implements ModuleDefinitionInterface
 
 		$loader->register();
 	}
-
+	
 	/**
 	 * Registers the module-only services
 	 *

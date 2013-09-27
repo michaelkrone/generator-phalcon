@@ -55,7 +55,7 @@ class Application extends \Phalcon\Mvc\Application
 		/**
 		 * Register the installed modules
 		 */
-		require __DIR__ . '/../../../config/modules.php';
+		$this->registerModules(require __DIR__ . '/../../../config/modules.php');
 
 		echo $this->handle()->getContent();
 	}
