@@ -4,6 +4,7 @@ namespace <%= project.namespace %>\Application;
 
 use \Phalcon\Mvc\Url as UrlResolver,
 	\Phalcon\DI\FactoryDefault,
+	\Phalcon\Mvc\View,
 	\Phalcon\Session\Adapter\Files as SessionAdapter;
 
 class Application extends \Phalcon\Mvc\Application
@@ -13,7 +14,7 @@ class Application extends \Phalcon\Mvc\Application
 	 */
 	protected function _registerServices()
 	{
-		$di = new \Phalcon\DI\FactoryDefault();
+		$di = new FactoryDefault();
 
 		/**
 		 * The application wide configuration
@@ -43,6 +44,16 @@ class Application extends \Phalcon\Mvc\Application
 			$metaDataConfig = $config->application->models->metadata;
 			$metadataAdapter = '\Phalcon\Mvc\Model\Metadata\\' . $metaDataConfig->adapter;
 			return new $metadataAdapter();
+		});
+
+
+		/**
+		 * Start the session the first time some component request the session service
+		 */
+		$di->set('view', function () {
+			$view = new View();
+			$view->setLayoutsDir(<%= project.layoutsDir %>);
+			return $view;
 		});
 
 		$this->setDI($di);

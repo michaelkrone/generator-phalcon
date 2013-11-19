@@ -10,11 +10,22 @@ var PhalconGenerator = module.exports = function PhalconGenerator(args, options,
 
   this.on('end', function () {
     this.installDependencies({ skipInstall: options['skip-install'] });
+
+    // we assume project slug as root folder, inform the user about this fact
     console.log(
       'Please make sure this project is located in the ' +
       (this.project.slug).yellow.bold +
       ' directory under your webserver root!'
     );
+
+     // call module generator
+    this.invoke('phalcon:module', {
+      options: {
+        'skip-install': true,
+        'moduleName': this.module.name,
+        'projectName': this.project.name,
+      }
+    });
   });
  
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
@@ -25,11 +36,10 @@ util.inherits(PhalconGenerator, yeoman.generators.Base);
 PhalconGenerator.prototype.askFor = function askFor()
 {
   var cb = this.async();
-  var you = ' you ';
 
   // have Yeoman greet the user
   // console.log(this.yeoman);
-  console.log('\nI welcome his dudeness to the ' + 'Phalcon project generator'.bold + '.\n\n' +
+  console.log('\nI welcome you to the ' + 'Phalcon project generator'.bold + '.\n\n' +
       'I will create a new ' + 'Phalcon multi module application'.yellow + '\n' +
       'Please answer some questions first:\n'
   );
@@ -38,12 +48,10 @@ PhalconGenerator.prototype.askFor = function askFor()
     {
       type: 'input',
       name: 'projectName',
-      message: 'How would' + you + 'like to call the new Project?',
+      message: 'How would you like to call the new Project?',
       validate: function (input) {
         if (!input) {
-          return 'I think your ' +
-            'project'.red +
-            ' deserves an awesome ' + 'name'.red + '!';
+          return 'I think your ' + 'project'.red + ' deserves an awesome ' + 'name'.red + '!';
         }
         return true;
       }
@@ -52,12 +60,10 @@ PhalconGenerator.prototype.askFor = function askFor()
     {
       type: 'input',
       name: 'moduleName',
-      message: 'How would' + you + 'like to name the main module?',
+      message: 'How would you like to name the main module?',
       validate: function (input) {
         if (!input) {
-          return 'Please specify a valid ' +
-            'module name'.red +
-            ' - this is not too difficult since it may be any string ...';
+          return 'Please specify a valid ' + 'module name'.red + ' - this is not too difficult since it may be any string ...';
         }
         return true;
       }
@@ -65,22 +71,8 @@ PhalconGenerator.prototype.askFor = function askFor()
   ];
 
   this.prompt(prompts, function (props) {
-    this.project = {
-        name: props.projectName,
-        namespace: this._.camelize(this._.capitalize(props.projectName)),
-        slug: this._.slugify(props.projectName),
-        camelCase: this._.camelize(props.projectName),
-        rewritePath: '/' + this._.slugify(props.projectName) + '/'
-    };
-
-    this.module = {
-        name: props.moduleName,
-        namespace: this._.camelize(this._.capitalize(props.moduleName)),
-        slug: this._.slugify(props.moduleName),
-        camelCase: this._.camelize(props.moduleName),
-        viewsDir: "__DIR__ . '/../../../public/src/app/" + this._.slugify(props.moduleName) + "/views/'"
-    };
-
+    this.project = this.getProjectObject(props.projectName);
+    this.module = this.getModuleObject(props.moduleName);
     cb();
   }.bind(this));
 };
@@ -89,8 +81,7 @@ PhalconGenerator.prototype.app = function app()
 {
   this.publicDirs();
   this.privateDirs();
-  this.moduleFiles();
-
+  
   /* copy .htaccess file as template */
   this.template('phalcon/.htaccess', '.htaccess');
   
@@ -122,24 +113,31 @@ PhalconGenerator.prototype.privateDirs = function privateDirs()
   this.directory('phalcon/private', dir);
 };
 
-/*
- * Create module directory structure and module specific files,
- * copy the view files to the public resources
- */
-PhalconGenerator.prototype.moduleFiles = function moduleFiles()
-{
-  var dir = 'private/modules/' + this.module.slug;
-  this.mkdir(dir);
-  this.directory('phalcon/modules/module', dir);
-
-  /* copy the views dir to public resources */
-  dir = 'public/src/app/' + this.module.slug + '/views';
-  this.mkdir(dir);
-  this.directory('phalcon/modules/views', dir);
-};
-
 PhalconGenerator.prototype.projectfiles = function projectfiles()
 {
   this.copy('editorconfig', '.editorconfig');
   this.copy('jshintrc', '.jshintrc');
+};
+
+PhalconGenerator.prototype.getModuleObject = function getModuleObject(moduleName)
+{
+  return {
+    name: moduleName,
+    namespace: this._.camelize(this._.capitalize(moduleName)),
+    slug: this._.slugify(moduleName),
+    camelCase: this._.camelize(moduleName),
+    viewsDir: "__DIR__ . '/../../../public/src/app/" + this._.slugify(moduleName) + "/views/'"
+  };
+};
+
+PhalconGenerator.prototype.getProjectObject = function getProjectObject(projectName)
+{
+  return {
+    name: projectName,
+    namespace: this._.camelize(this._.capitalize(projectName)),
+    slug: this._.slugify(projectName),
+    camelCase: this._.camelize(projectName),
+    rewritePath: '/' + this._.slugify(projectName) + '/',
+    layoutsDir: "__DIR__ . '/../../../public/src/app/layouts/'"
+  };
 };

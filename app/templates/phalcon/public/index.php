@@ -10,9 +10,9 @@ try {
 	$application = new <%= project.namespace %>\Application\Application();
 	$application->main();
 } catch (\Phalcon\Exception $e) {
-	echo 'Phalcon\Exception: ', $e->getMessage(), $e->getTraceAsString();
+	echo 'A Phalcon\Exception occurred: ', $e->getMessage(), $e->getTraceAsString();
 } catch (\PDOException $e) {
-	echo 'PDOException: ', $e->getMessage(), $e->getTraceAsString();
+	echo 'A PDOException occurred: ', $e->getMessage(), $e->getTraceAsString();
 } catch (\Exception $e) {
-	echo 'Exception: ', $e->getMessage(), $e->getTraceAsString();
+	echo 'An Exception occurred: ', $e->getMessage(), $e->getTraceAsString();
 }
