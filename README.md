@@ -40,7 +40,7 @@ You will be asked some questions about your application. Finally you have a work
 ### Module Subgenerator
 
 ```
-$ yo phalcon:module AdditionalModule
+$ yo phalcon:module
 ```
 
 This will kickstart the module generator which will include a new module in your project. This works for every project created by the generator-phalcon generator.
