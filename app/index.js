@@ -37,8 +37,6 @@ PhalconGenerator.prototype.askFor = function askFor()
 {
   var cb = this.async();
 
-  // have Yeoman greet the user
-  // console.log(this.yeoman);
   console.log('\nI welcome you to the ' + 'Phalcon project generator'.bold + '.\n\n' +
       'I will create a new ' + 'Phalcon multi module application'.yellow + '\n' +
       'Please answer some questions first:\n'

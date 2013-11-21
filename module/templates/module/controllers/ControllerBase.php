@@ -2,9 +2,9 @@
 
 namespace <%= project.namespace %>\<%= module.namespace %>\Controllers;
 
-use Phalcon\Mvc\Controller;
+use <%= project.namespace %>\Controllers\MainController;
 
-class ControllerBase extends Controller
+class ControllerBase extends MainController
 {
 
 }

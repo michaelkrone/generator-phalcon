@@ -5,6 +5,7 @@ namespace <%= project.namespace %>\<%= module.namespace %>;
 use Phalcon\Loader,
 	Phalcon\Mvc\View,
 	Phalcon\Mvc\Dispatcher,
+	Phalcon\Events\Manager,
 	Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter,
 	Phalcon\Mvc\ModuleDefinitionInterface,
 	Phalcon\Mvc\Router\Group;
@@ -47,6 +48,8 @@ class Module implements ModuleDefinitionInterface
 		$di->set('view', function() {
 			$view = new View();
 			$view->setViewsDir(<%= module.viewsDir %>);
+			$view->setLayoutsDir('../../layouts/');
+			$view->setPartialsDir('../../partials/');
 			$view->registerEngines(
 				array('.html' => 'Phalcon\Mvc\View\Engine\Php')
         	);
@@ -67,6 +70,8 @@ class Module implements ModuleDefinitionInterface
 		 */
 		$di->set('dispatcher', function () {
         	$dispatcher = new Dispatcher();
+	        $eventsManager = new Manager();
+	        $dispatcher->setEventsManager($eventsManager);
 			$dispatcher->setDefaultNamespace('<%= project.namespace %>\<%= module.namespace %>\\');
 			return $dispatcher;
 		});
@@ -77,7 +82,7 @@ class Module implements ModuleDefinitionInterface
 		$di->getShared('router')->mount(new Config\ModuleRoutes());
 
 		/**
-		 * Database connection is created based in the parameters defined in the configuration file
+		 * Module specific database connection
 		 */
 		$di->set('db', function() use ($appConfig) {
 			return new DbAdapter(array(

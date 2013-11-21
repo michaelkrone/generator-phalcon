@@ -11,7 +11,7 @@ var ModuleGenerator = module.exports = function ModuleGenerator(args, options, c
 
 	this.on('end', function () {
 	    this.installDependencies({ skipInstall: options['skip-install'] });
-		console.log('The module' + (this.project.slug).yellow.bold + ' has been created.');
+		console.log('The module ' + (this.module.slug).yellow.bold + ' has been created.');
 	});
 	
 	console.log(
@@ -35,7 +35,6 @@ util.inherits(ModuleGenerator, yeoman.generators.Base);
 
 ModuleGenerator.prototype.askFor = function askFor()
 {
-	console.log
 	var prompts,
 		cb = this.async();
 
@@ -127,7 +126,7 @@ ModuleGenerator.prototype.moduleFiles = function moduleFiles()
 {
   var dir = 'private/modules/' + this.module.slug;
   this.mkdir(dir);
-  this.directory('module/', dir);
+  this.directory('module', dir);
 
   /* copy the views dir to public resources */
   dir = 'public/src/app/' + this.module.slug + '/views';
