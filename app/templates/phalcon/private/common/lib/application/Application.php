@@ -17,7 +17,7 @@ class Application extends \Phalcon\Mvc\Application
 	{
 		$loader = new Loader();
 		$loader->registerNamespaces(array(
-			'<%= project.namespace %>\Controllers' => __DIR__ . '/../controllers/'
+			'<%= project.namespace %>\Controllers' => __DIR__ . '/controllers/'
 		))->register();
 
 		$di = new FactoryDefault();
