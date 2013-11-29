@@ -61,7 +61,7 @@ class Module implements ModuleDefinitionInterface
 		 */
 		$di->set('url', function () use ($appConfig) {
 			$url = new UrlResolver();
-			$url->setBaseUri($config->application->baseUri);
+			$url->setBaseUri($appConfig->application->baseUri);
 			return $url;
 		});
 
