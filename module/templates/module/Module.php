@@ -3,15 +3,30 @@
 namespace <%= project.namespace %>\<%= module.namespace %>;
 
 use Phalcon\Loader,
+	Phalcon\DI,
 	Phalcon\Mvc\View,
 	Phalcon\Mvc\Dispatcher,
 	Phalcon\Events\Manager,
 	Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter,
 	Phalcon\Mvc\ModuleDefinitionInterface,
-	Phalcon\Mvc\Router\Group;
+	<%= project.namespace %>\Application\ApplicationModuleInterface;
 
-class Module implements ModuleDefinitionInterface
+class Module implements ApplicationModuleInterface
 {
+
+	/**
+	 *  Register the module specific configuration classes
+	 */
+	public static function initConfiguration() {
+		$loader = new Loader();
+		$loader->registerNamespaces(['<%= project.namespace %>\<%= module.namespace %>\Config' => __DIR__ . '/config/'])
+			->register()
+			->autoLoad('<%= project.namespace %>\<%= module.namespace %>\Config\ModuleRoutes');
+
+		DI::getDefault()->getRouter()->mount(new Config\ModuleRoutes());
+	}
+
+    public function initCustomerConfiguration() {}
 
 	/**
 	 * Registers the module auto-loader
@@ -19,14 +34,12 @@ class Module implements ModuleDefinitionInterface
 	public function registerAutoloaders()
 	{
 		$loader = new Loader();
-
-		$loader->registerNamespaces(array(
+		$loader->registerNamespaces([
 			'<%= project.namespace %>\<%= module.namespace %>\Config' => __DIR__ . '/config/',
 			'<%= project.namespace %>\<%= module.namespace %>\Controllers' => __DIR__ . '/controllers/',
 			'<%= project.namespace %>\<%= module.namespace %>\Models' => __DIR__ . '/models/',
 			'<%= project.namespace %>\<%= module.namespace %>\Library' => __DIR__ . '/lib/',
-		));
-
+		]);
 		$loader->register();
 	}
 	
@@ -50,9 +63,7 @@ class Module implements ModuleDefinitionInterface
 			$view->setViewsDir(<%= module.viewsDir %>);
 			$view->setLayoutsDir('../../layouts/');
 			$view->setPartialsDir('../../partials/');
-			$view->registerEngines(
-				array('.html' => 'Phalcon\Mvc\View\Engine\Php')
-        	);
+			$view->registerEngines(['.html' => 'Phalcon\Mvc\View\Engine\Php']);
 			return $view;
 		});
 
@@ -77,20 +88,15 @@ class Module implements ModuleDefinitionInterface
 		});
 
 		/**
-		 * Register module specific routes
-		 */
-		$di->getShared('router')->mount(new Config\ModuleRoutes());
-
-		/**
 		 * Module specific database connection
 		 */
 		$di->set('db', function() use ($appConfig) {
-			return new DbAdapter(array(
+			return new DbAdapter([
 				'host' => $appConfig->database->host,
 				'username' => $appConfig->database->username,
 				'password' => $appConfig->database->password,
 				'dbname' => $appConfig->database->name
-			));
+			]);
 		});
 	}
 }

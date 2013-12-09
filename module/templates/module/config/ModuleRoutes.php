@@ -10,6 +10,11 @@ class ModuleRoutes extends Group
 	public function initialize()
 	{
 		/**
+		 * In the URI this module is prefixed by /<%= module.slug %> 
+		 */
+		$this->setPrefix('/<%= module.slug %>');
+
+		/**
 		 * Configure the instance
 		 */
 		$this->setPaths(array(
@@ -18,11 +23,6 @@ class ModuleRoutes extends Group
 			'controller' => 'index',
 			'action' => 'index'
 		));
-
-		/**
-		 * In the URI this module is prefixed by /<%= module.slug %> 
-		 */
-		$this->setPrefix('/<%= module.slug %>');
 
 		/**
 		 * Add module specific routes here

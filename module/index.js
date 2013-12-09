@@ -100,22 +100,22 @@ ModuleGenerator.prototype.addModuleConfig = function addModuleConfig()
 	 var file = 'private/config/modules.php',
 	 	moduleString = "\n\t'" + this.module.slug + "' => array(\n\t\t" +
 				"'className' => '\\" + this.project.namespace + "\\" + this.module.namespace + "\\Module',\n\t\t" +
-				"'path' => __DIR__ . '/../modules/" + this.module.slug + "/Module.php'\n\t" +
+				"'path' => __DIR__ . '/../modules/" + this.module.slug + "/Module.php',\n\t" +
 			"),\n" +
 		");\n";
 
-		fs.readFile(file, 'utf8', function (err, data) {
-			if (err) {
-				return console.log(err);
-			} else {
-				var result = data.replace(/\);/g, moduleString);
-				fs.writeFile(file, result, 'utf8', function (err) {
-					 if (err) {
-						return console.log(err);
-					}
-				});
-			}
-		});
+	fs.readFile(file, 'utf8', function (err, data) {
+		if (err) {
+			return console.log(err);
+		} else {
+			var result = data.replace(/\);/g, moduleString);
+			fs.writeFile(file, result, 'utf8', function (err) {
+				 if (err) {
+					return console.log(err);
+				}
+			});
+		}
+	});
 };
 
 /*
