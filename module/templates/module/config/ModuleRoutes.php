@@ -2,7 +2,7 @@
 
 namespace <%= project.namespace %>\<%= module.namespace %>\Config;
 
-use Phalcon\Mvc\Router\Group;
+use \Phalcon\Mvc\Router\Group;
 
 class ModuleRoutes extends Group
 {

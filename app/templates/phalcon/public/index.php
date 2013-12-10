@@ -4,7 +4,7 @@ use Phalcon\DI\FactoryDefault;
 
 /**
  * We're not registering the root library to instantiate the Application class,
- * just include it for performance reasons (can be cached by APC, no object creation etc.)
+ * just include it for performance reasons.
  */
 require __DIR__ . '/../private/common/lib/application/Application.php';
  
