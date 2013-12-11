@@ -8,7 +8,6 @@ use \Phalcon\Mvc\Url as UrlResolver,
 	\Phalcon\Loader,
 	\Phalcon\Session\Adapter\Files as SessionAdapter,
 	\Phalcon\Http\ResponseInterface,
-	\<%= project.namespace %>\Application\Interfaces\ConfigurationInitable,
 	\<%= project.namespace %>\Application\Router\ApplicationRouter;
 
 class Application extends \Phalcon\Mvc\Application
@@ -103,8 +102,11 @@ class Application extends \Phalcon\Mvc\Application
 			if ($loader->registerClasses([ $cName => $module['path'] ], true)
 					->register()
 					->autoLoad($cName)
-	            && is_subclass_of($cName, '<%= project.namespace %>\Application\Interfaces\ConfigurationInitable')
+	            && is_subclass_of($cName, '\<%= project.namespace %>\Application\Interfaces\ConfigurationInitable')
 			) {
+				/**
+	             * @var \<%= project.namespace %>\Application\Interfaces\ConfigurationInitable $cName
+	             */
 				$cName::initConfiguration($this->di, $this->config);
 			}
 		}
