@@ -124,7 +124,7 @@ PhalconGenerator.prototype.getModuleObject = function getModuleObject(moduleName
     namespace: this._.camelize(this._.capitalize(moduleName)),
     slug: this._.slugify(moduleName),
     camelCase: this._.camelize(moduleName),
-    viewsDir: "__DIR__ . '/../../../public/src/app/" + this._.slugify(moduleName) + "/views/'"
+    viewsDir: "__DIR__ . '/../../../public/src/app/modules/" + this._.slugify(moduleName) + "/views/'"
   };
 };
 

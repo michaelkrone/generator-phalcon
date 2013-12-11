@@ -1,3 +1,3 @@
 <?php
 
-return new \Phalcon\Config(array());
+return new \Phalcon\Config([]);

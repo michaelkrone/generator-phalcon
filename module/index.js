@@ -129,7 +129,7 @@ ModuleGenerator.prototype.moduleFiles = function moduleFiles()
   this.directory('module', dir);
 
   /* copy the views dir to public resources */
-  dir = 'public/src/app/' + this.module.slug + '/views';
+  dir = 'public/src/app/modules/' + this.module.slug + '/views';
   this.mkdir(dir);
   this.directory('views', dir);
 };
@@ -153,6 +153,6 @@ ModuleGenerator.prototype.getModuleObject = function getModuleObject(moduleName)
 		namespace: this._.camelize(this._.capitalize(moduleName)),
 		slug: this._.slugify(moduleName),
 		camelCase: this._.camelize(moduleName),
-		viewsDir: "__DIR__ . '/../../../public/src/app/" + this._.slugify(moduleName) + "/views/'"
+		viewsDir: "__DIR__ . '/../../../public/src/app/modules/" + this._.slugify(moduleName) + "/views/'"
 	};
 };

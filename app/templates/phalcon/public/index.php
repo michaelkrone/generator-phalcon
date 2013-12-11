@@ -2,12 +2,11 @@
 
 use Phalcon\DI\FactoryDefault;
 
-/**
- * We're not registering the root library to instantiate the Application class,
- * just include it for performance reasons.
- */
 require __DIR__ . '/../private/common/lib/application/Application.php';
- 
+
+/**
+ * Instantiate the Application class to do the bootstrapping
+ */
 try {
 	$application = new <%= project.namespace %>\Application\Application(new FactoryDefault());
 	$application->main();

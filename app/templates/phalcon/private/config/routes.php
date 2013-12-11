@@ -8,17 +8,17 @@ use \Phalcon\Mvc\Router;
 
 $router = new Router();
 $router->removeExtraSlashes(true);
-$router->setDefaultController('index');
-$router->setDefaultAction('index');
+$router->setDefaults(array(
+    'controller' => 'index',
+    'action' => 'index'
+));
 
 /**
- * Add global matching route for default module
+ * Add global matching route for default module <%= module.namespace %>
  */
 $router->add('/', [
 	'module' => '<%= module.slug %>',
-	'namespace' => '<%= project.namespace %>\<%= module.namespace %>\Controllers\\',
-	'controller' => 'index',
-	'action' => 'index'
+	'namespace' => '<%= project.namespace %>\<%= module.namespace %>\Controllers\API\\'
 ])->setName('default-route');
 
 /**

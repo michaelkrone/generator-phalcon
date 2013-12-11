@@ -17,24 +17,24 @@ class ModuleRoutes extends Group
 		/**
 		 * Configure the instance
 		 */
-		$this->setPaths(array(
+		$this->setPaths([
 			'module' => '<%= module.slug %>',
-			'namespace' => '<%= project.namespace %>\<%= module.namespace %>\Controllers\\',
+			'namespace' => '<%= project.namespace %>\<%= module.namespace %>\Controllers\API\\',
 			'controller' => 'index',
 			'action' => 'index'
-		));
+		]);
 
 		/**
 		 * Add module specific routes here
 		 */
-		$this->addGet('/:controller', array(
+		$this->addGet('/:controller', [
 			'controller' => 1
-		))->setName('<%= module.slug %>-controller-route');
+		])->setName('<%= module.slug %>-default-route');
 
-		$this->addGet('/:controller/:action/:params', array(
+		$this->addGet('/:controller/:action/:params', [
 			'controller' => 1,
 			'action' => 2,
 			'params' => 3
-		))->setName('<%= module.slug %>-action-route');
+		])->setName('<%= module.slug %>-action-route');
 	}
 }

@@ -7,8 +7,10 @@ use \Phalcon\Loader,
 	\Phalcon\Mvc\View,
 	\Phalcon\Mvc\Dispatcher,
 	\Phalcon\Events\Manager,
+	\Phalcon\Config,
+	\Phalcon\DiInterface,
 	\Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter,
-	\<%= project.namespace %>\Interfaces\ApplicationModule;
+	\<%= project.namespace %>\Application\Interfaces\ApplicationModule;
 
 class Module extends ApplicationModule
 {
@@ -22,18 +24,19 @@ class Module extends ApplicationModule
 	/**
 	 * Perform any pre module init logic here,
 	 * register the module specific configuration classes
+	 *
+	 * @param \Phalcon\DiInterface  $di
+	 * @param \Phalcon\Config $config
 	 */
-	public static function initConfiguration() {
+	public static function initConfiguration(DiInterface $di, Config $config) {
 		$loader = new Loader();
-		$loader->registerNamespaces([
-				'<%= project.namespace %>\<%= module.namespace %>\Config' => __DIR__ . '/config/'
-				], true)
+		$loader->registerNamespaces(['<%= project.namespace %>\<%= module.namespace %>\Config' => __DIR__ . '/config/'], true)
 			->register();
 
 		/**
 		 * Mount the module specific routes
 		 */
-		DI::getDefault()->getRouter()->mount(new Config\ModuleRoutes());
+		$di->getRouter()->mount(new \<%= project.namespace %>\<%= module.namespace %>\Config\ModuleRoutes());
 	}
 
 	/**
@@ -45,6 +48,7 @@ class Module extends ApplicationModule
 		$loader->registerNamespaces([
 				'<%= project.namespace %>\<%= module.namespace %>\Config' => __DIR__ . '/config/',
 				'<%= project.namespace %>\<%= module.namespace %>\Controllers' => __DIR__ . '/controllers/',
+				'<%= project.namespace %>\<%= module.namespace %>\Controllers\API' => __DIR__ . '/controllers/api/',
 				'<%= project.namespace %>\<%= module.namespace %>\Models' => __DIR__ . '/models/',
 				'<%= project.namespace %>\<%= module.namespace %>\Library' => __DIR__ . '/lib/',
 			], true)
@@ -69,8 +73,8 @@ class Module extends ApplicationModule
 		$di->set('view', function() {
 			$view = new View();
 			$view->setViewsDir(<%= module.viewsDir %>);
-			$view->setLayoutsDir('../../layouts/');
-			$view->setPartialsDir('../../partials/');
+			$view->setLayoutsDir('../../../layouts/');
+			$view->setPartialsDir('../../../partials/');
 			$view->registerEngines(['.html' => 'Phalcon\Mvc\View\Engine\Php']);
 			return $view;
 		});

@@ -7,7 +7,8 @@ use \Phalcon\Mvc\Url as UrlResolver,
 	\Phalcon\Mvc\View,
 	\Phalcon\Loader,
 	\Phalcon\Session\Adapter\Files as SessionAdapter,
-	\Phalcon\Http\ResponseInterface;
+	\Phalcon\Http\ResponseInterface,
+	\<%= project.namespace %>\Interfaces\ConfigurationInitable;
 
 class Application extends \Phalcon\Mvc\Application
 {
@@ -20,21 +21,22 @@ class Application extends \Phalcon\Mvc\Application
     {
 		/**
 		 * Sets the parent DI and register the app itself as a service,
-		 * neccessary for redirecting HMVC requests
+		 * necessary for redirecting HMVC requests
 		 */
 		parent::setDI($di);
         $di->set('app', $this);
 
         /**
-         * Register namespaces for application classes
+         * Register namespaces for application classes since they are used
+         * in the modules definitions
          */
         $loader = new Loader();
-		$loader->registerNamespaces([
-				'<%= project.namespace %>\Application' => __DIR__,
-				'<%= project.namespace %>\Controllers' => __DIR__ . '/../controllers/',
-				'<%= project.namespace %>\Interfaces' => __DIR__ . '/../interfaces/'
-			], true)
-			->register();
+        $loader->registerNamespaces([
+                'GastroKey\Application' => __DIR__,
+                'GastroKey\Application\Controllers' => __DIR__ . '/controllers/',
+                'GastroKey\Application\Interfaces' => __DIR__ . '/interfaces/'
+            ], true)
+            ->register();
 
 		/**
 		 * Register application wide accessible services
@@ -93,11 +95,13 @@ class Application extends \Phalcon\Mvc\Application
 		$modules = $this->getModules();
 
 		foreach ($modules as $module) {
-			if ($loader->registerClasses([ $module['className'] => $module['path'] ], true)
+			$cName = $module['className'];
+			if ($loader->registerClasses([ $cName => $module['path'] ], true)
 					->register()
-					->autoLoad($module['className'])
+					->autoLoad($cName)
+	            && is_subclass_of($cName, '\GastroKey\Interfaces\ConfigurationInitable')
 			) {
-				$module['className']::initConfiguration();
+				$cName::initConfiguration($this->di, $this->config);
 			}
 		}
 	}
@@ -108,43 +112,23 @@ class Application extends \Phalcon\Mvc\Application
 	}
 
 	 /**
-     * Does a HMVC request inside the application
-     *
-     * Inside a controller we might do
-     * <code>
-     * $this->app->request([ 'controller' => 'do', 'action' => 'something' ], 'param');
-     * </code>
-     *
-     * @param array $location
-     * @param array $data
-     * @return mixed
-     */
-    public function request($location, $data = null)
+      * Does a HMVC request inside the application
+      *
+      * Inside a controller we might do
+      * <code>
+      * $this->app->request([ 'controller' => 'do', 'action' => 'something' ], 'param');
+      * </code>
+      *
+      * @param array $location Array with the route information: 'controller', 'action', 'params'
+      * @param array $data Additional request meta data (not used yet)
+      * @return mixed
+      */
+    public function request(array $location, array $data = null)
     {
         $dispatcher = clone $this->di->get('dispatcher');
-
-        if (isset($location['controller'])) {
-			$dispatcher->setControllerName($location['controller']);
-        } else {
-			$dispatcher->setControllerName('index');
-        }
-
-        if (isset($location['action'])) {
-			$dispatcher->setActionName($location['action']);
-        } else {
-			$dispatcher->setActionName('index');
-        }
-
-        if (isset($location['params'])) {
-			if(is_array($location['params'])) {
-				$dispatcher->setParams($location['params']);
-			} else {
-				$dispatcher->setParams((array) $location['params']);
-			}
-        } else {
-        	$dispatcher->setParams(array());
-        }
-
+		$dispatcher->setControllerName(isset($location['controller']) ? $location['controller'] : 'index');
+		$dispatcher->setActionName(isset($location['action']) ? $location['action'] : 'index');
+		$dispatcher->setParams(isset($location['params']) ? (array) $location['params'] : []);
         $dispatcher->dispatch();
 
         $response = $dispatcher->getReturnedValue();
