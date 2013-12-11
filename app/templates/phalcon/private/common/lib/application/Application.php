@@ -8,7 +8,8 @@ use \Phalcon\Mvc\Url as UrlResolver,
 	\Phalcon\Loader,
 	\Phalcon\Session\Adapter\Files as SessionAdapter,
 	\Phalcon\Http\ResponseInterface,
-	\<%= project.namespace %>\Interfaces\ConfigurationInitable;
+	\<%= project.namespace %>\Application\Interfaces\ConfigurationInitable,
+	\<%= project.namespace %>\Application\Router\ApplicationRouter;
 
 class Application extends \Phalcon\Mvc\Application
 {
@@ -34,7 +35,9 @@ class Application extends \Phalcon\Mvc\Application
         $loader->registerNamespaces([
                 'GastroKey\Application' => __DIR__,
                 'GastroKey\Application\Controllers' => __DIR__ . '/controllers/',
-                'GastroKey\Application\Interfaces' => __DIR__ . '/interfaces/'
+                'GastroKey\Application\Interfaces' => __DIR__ . '/interfaces/',
+                'GastroKey\Application\Models' => __DIR__ . '/models/',
+                'GastroKey\Application\Router' => __DIR__ . '/router/'
             ], true)
             ->register();
 
@@ -72,7 +75,7 @@ class Application extends \Phalcon\Mvc\Application
 		/**
 		 * Registering the application wide router with the standard routes set
 		 */
-		$this->di->set('router', include __DIR__ . '/../../../config/routes.php');
+		$this->di->set('router', new ApplicationRouter());
 
 		/**
 		 * Specify the use of metadata adapter
@@ -86,7 +89,8 @@ class Application extends \Phalcon\Mvc\Application
 
 	/**
 	 * Register the given modules in the parent and prepare to load the module definition classes
-	 * by triggering the pre load configuration with the initConfiguration method
+	 * by triggering the pre load configuration with the initConfiguration method if the module
+	 * is an instance of <%= project.namespace %>\Application\Interfaces\ConfigurationInitable
 	 */
 	public function registerModules($modules, $merge = null)
 	{
@@ -99,13 +103,16 @@ class Application extends \Phalcon\Mvc\Application
 			if ($loader->registerClasses([ $cName => $module['path'] ], true)
 					->register()
 					->autoLoad($cName)
-	            && is_subclass_of($cName, '\GastroKey\Interfaces\ConfigurationInitable')
+	            && is_subclass_of($cName, '<%= project.namespace %>\Application\Interfaces\ConfigurationInitable')
 			) {
 				$cName::initConfiguration($this->di, $this->config);
 			}
 		}
 	}
 
+	/**
+	 * Handles the request and echoes its content to the output stream.
+	 */
 	public function main()
 	{
 		echo $this->handle()->getContent();

@@ -9,6 +9,7 @@ use \Phalcon\Loader,
 	\Phalcon\Events\Manager,
 	\Phalcon\Config,
 	\Phalcon\DiInterface,
+	\Phalcon\Mvc\Url as UrlResolver,
 	\Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter,
 	\<%= project.namespace %>\Application\Interfaces\ApplicationModule;
 
@@ -24,19 +25,16 @@ class Module extends ApplicationModule
 	/**
 	 * Perform any pre module init logic here,
 	 * register the module specific configuration classes
+	 * and mount the module specific routes
 	 *
 	 * @param \Phalcon\DiInterface  $di
 	 * @param \Phalcon\Config $config
 	 */
 	public static function initConfiguration(DiInterface $di, Config $config) {
 		$loader = new Loader();
-		$loader->registerNamespaces(['<%= project.namespace %>\<%= module.namespace %>\Config' => __DIR__ . '/config/'], true)
+		$loader->registerNamespaces(['<%= project.namespace %>\<%= module.namespace %>' => __DIR__], true)
 			->register();
-
-		/**
-		 * Mount the module specific routes
-		 */
-		$di->getRouter()->mount(new \<%= project.namespace %>\<%= module.namespace %>\Config\ModuleRoutes());
+		$di->getRouter()->mount(new ModuleRoutes());
 	}
 
 	/**
@@ -46,7 +44,7 @@ class Module extends ApplicationModule
 	{
 		$loader = new Loader();
 		$loader->registerNamespaces([
-				'<%= project.namespace %>\<%= module.namespace %>\Config' => __DIR__ . '/config/',
+				'<%= project.namespace %>\<%= module.namespace %>' => __DIR__,
 				'<%= project.namespace %>\<%= module.namespace %>\Controllers' => __DIR__ . '/controllers/',
 				'<%= project.namespace %>\<%= module.namespace %>\Controllers\API' => __DIR__ . '/controllers/api/',
 				'<%= project.namespace %>\<%= module.namespace %>\Models' => __DIR__ . '/models/',
@@ -58,7 +56,7 @@ class Module extends ApplicationModule
 	/**
 	 * Registers the module-only services
 	 *
-	 * @param Phalcon\DiInterface $di
+	 * @param \Phalcon\DiInterface $di
 	 */
 	public function registerServices($di)
 	{
