@@ -6,10 +6,14 @@ use \Phalcon\Mvc\Url as UrlResolver,
 	\Phalcon\DiInterface,
 	\Phalcon\Mvc\View,
 	\Phalcon\Loader,
-	\Phalcon\Session\Adapter\Files as SessionAdapter,
 	\Phalcon\Http\ResponseInterface,
+	\Phalcon\Session\Adapter\Files as SessionAdapter,
 	\<%= project.namespace %>\Application\Router\ApplicationRouter;
 
+/**
+ * Application class for multi module applications
+ * including HMVC internal requests.
+ */
 class Application extends \Phalcon\Mvc\Application
 {
 	/**

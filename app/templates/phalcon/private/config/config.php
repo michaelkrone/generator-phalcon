@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Simple application configuration
+ */
 return new \Phalcon\Config(array(
 	
 	'database' => array(

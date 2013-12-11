@@ -5,6 +5,9 @@ namespace <%= project.namespace %>\Application\Interfaces;
 use \Phalcon\DiInterface,
 	\Phalcon\Config;
 
+/**
+ * Interface for objects that need to initialize configurations before loading
+ */
 interface ConfigurationInitable {
 
 	/**

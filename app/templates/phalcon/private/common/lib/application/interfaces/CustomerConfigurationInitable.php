@@ -2,6 +2,9 @@
 
 namespace <%= project.namespace %>\Application\Interfaces;
 
+/**
+ * Interface for objects that need to initialize customer specific configurations before loading
+ */
 interface CustomerConfigurationInitable {
 
 	/**

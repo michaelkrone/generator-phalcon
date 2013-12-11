@@ -13,6 +13,10 @@ use \Phalcon\Loader,
 	\Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter,
 	\<%= project.namespace %>\Application\Interfaces\ApplicationModule;
 
+/**
+ * Application module definition for multi module application
+ * Defining the <%= module.namespace %> module 
+ */
 class Module extends ApplicationModule
 {
 	/**
