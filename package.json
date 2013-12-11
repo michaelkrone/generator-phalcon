@@ -1,15 +1,17 @@
 {
   "name": "generator-phalcon",
-  "version": "0.0.8",
-  "description": "Let Yeoman generate a new Phalcon multi module project.",
+  "version": "0.0.9",
+  "description": "Let Yeoman generate a new Phalcon PHP framework multi module project.",
   "keywords": [
-    "yeoman-generator"
+    "yeoman-generator",
+    "phalcon",
+    "php"
   ],
   "homepage": "https://github.com/michaelkrone/generator-phalcon",
   "bugs": "https://github.com/michaelkrone/generator-phalcon/issues",
   "author": {
     "name": "Michael Krone",
-    "email": "michael.krone@live.de",
+    "email": "michael.krone@outlook.com",
     "url": "https://github.com/michaelkrone"
   },
   "main": "app/index.js",
