@@ -31,26 +31,26 @@ class ModuleRoutes extends Group
 		]);
 
 		/**
-		 * Default route: '<%= module.slug %>-default-route'
+		 * Default route: '<%= module.slug %>-default'
 		 */
 		$this->addGet('', [])
-			->setName('<%= module.slug %>-default-route');
+			->setName('<%= module.slug %>-default');
 
 		/**
-		 * Controller route: '<%= module.slug %>-controller-route'
+		 * Controller route: '<%= module.slug %>-controller'
 		 */
 		$this->addGet('/:controller', ['controller' => 1])
-			->setName('<%= module.slug %>-controller-route');
+			->setName('<%= module.slug %>-controller');
 
 		/**
-		 * Action route: '<%= module.slug %>-action-route'
+		 * Action route: '<%= module.slug %>-action'
 		 */
 		$this->addGet('/:controller/:action/:params', [
 				'controller' => 1,
 				'action' => 2,
 				'params' => 3
 			])
-			->setName('<%= module.slug %>-action-route');
+			->setName('<%= module.slug %>-action');
 
 		/**
 		 * Add all <%= project.namespace %>\<%= module.namespace %> specific routes here

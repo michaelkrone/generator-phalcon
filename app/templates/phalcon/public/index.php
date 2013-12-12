@@ -1,4 +1,8 @@
 <?php
+/**
+ * Change error reporting level for production use
+ */
+error_reporting(E_ALL);
 
 use Phalcon\DI\FactoryDefault;
 

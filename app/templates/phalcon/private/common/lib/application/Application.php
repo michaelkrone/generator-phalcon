@@ -7,6 +7,7 @@ use \Phalcon\Mvc\Url as UrlResolver,
 	\Phalcon\Mvc\View,
 	\Phalcon\Loader,
 	\Phalcon\Http\ResponseInterface,
+	\Phalcon\Events\Manager as EventsManager,
 	\Phalcon\Session\Adapter\Files as SessionAdapter,
 	\<%= project.namespace %>\Application\Router\ApplicationRouter;
 
@@ -30,19 +31,6 @@ class Application extends \Phalcon\Mvc\Application
 		parent::setDI($di);
         $di->set('app', $this);
 
-        /**
-         * Register namespaces for application classes since they are used
-         * in the modules definitions
-         */
-        $loader = new Loader();
-        $loader->registerNamespaces([
-                'GastroKey\Application' => __DIR__,
-                'GastroKey\Application\Controllers' => __DIR__ . '/controllers/',
-                'GastroKey\Application\Interfaces' => __DIR__ . '/interfaces/',
-                'GastroKey\Application\Models' => __DIR__ . '/models/',
-                'GastroKey\Application\Router' => __DIR__ . '/router/'
-            ], true)
-            ->register();
 
 		/**
 		 * Register application wide accessible services
@@ -56,7 +44,8 @@ class Application extends \Phalcon\Mvc\Application
     }
 
 	/**
-	 * Register the services here to make them general or register in the ModuleDefinition to make them module-specific
+	 * Register the services here to make them general or register in the
+	 * ModuleDefinition to make them module-specific
 	 */
 	protected function _registerServices()
 	{
@@ -65,6 +54,25 @@ class Application extends \Phalcon\Mvc\Application
 		 */
 		$config = include __DIR__ . '/../../../config/config.php';
 		$this->di->set('config', $config);
+
+		/**
+		 * Setup an events manager with priorities enabled
+		 */
+		$eventsManager = new EventsManager();
+		$eventsManager->enablePriorities(true);
+		$this->setEventsManager($eventsManager);
+
+        /**
+         * Register namespaces for application classes
+         */
+        $loader = new Loader();
+        $loader->registerNamespaces([
+                'GastroKey\Application' => __DIR__,
+                'GastroKey\Application\Controllers' => __DIR__ . '/controllers/',
+                'GastroKey\Application\Models' => __DIR__ . '/models/',
+                'GastroKey\Application\Router' => __DIR__ . '/router/'
+            ], true)
+            ->register();
 
 		/**
 		 * Start the session the first time some component request the session service
@@ -83,17 +91,12 @@ class Application extends \Phalcon\Mvc\Application
 		/**
 		 * Specify the use of metadata adapter
 		 */
-		$this->di->set('modelsMetadata', function () use ($config) {
-			$metaDataConfig = $config->application->models->metadata;
-			$metadataAdapter = '\Phalcon\Mvc\Model\Metadata\\' . $metaDataConfig->adapter;
-			return new $metadataAdapter();
-		});
+		$this->di->set('modelsMetadata', '\Phalcon\Mvc\Model\Metadata\\' . $config->application->models->metadata->adapter);
 	}
 
 	/**
-	 * Register the given modules in the parent and prepare to load the module definition classes
-	 * by triggering the pre load configuration with the initConfiguration method if the module
-	 * is an instance of <%= project.namespace %>\Application\Interfaces\ConfigurationInitable
+	 * Register the given modules in the parent and prepare to load
+	 * the module routes by triggering the init routes method
 	 */
 	public function registerModules($modules, $merge = null)
 	{
@@ -102,16 +105,10 @@ class Application extends \Phalcon\Mvc\Application
 		$modules = $this->getModules();
 
 		foreach ($modules as $module) {
-			$cName = $module['className'];
-			if ($loader->registerClasses([ $cName => $module['path'] ], true)
-					->register()
-					->autoLoad($cName)
-	            && is_subclass_of($cName, '\<%= project.namespace %>\Application\Interfaces\ConfigurationInitable')
-			) {
-				/**
-	             * @var \<%= project.namespace %>\Application\Interfaces\ConfigurationInitable $cName
-	             */
-				$cName::initConfiguration($this->di, $this->config);
+			$className = $module['className'];
+			if ( $loader->registerClasses([ $className => $module['path'] ], true)->register()->autoLoad($className) ) {
+				/** @var \<%= project.namespace %>\Application\ApplicationModule $className */
+				$className::initRoutes($this->di);
 			}
 		}
 	}
@@ -139,13 +136,13 @@ class Application extends \Phalcon\Mvc\Application
     public function request(array $location, array $data = null)
     {
         $dispatcher = clone $this->di->get('dispatcher');
-		$dispatcher->setControllerName(isset($location['controller']) ? $location['controller'] : 'index');
-		$dispatcher->setActionName(isset($location['action']) ? $location['action'] : 'index');
-		$dispatcher->setParams(isset($location['params']) ? (array) $location['params'] : []);
-        $dispatcher->dispatch();
+		$response = $dispatcher
+			->setControllerName(isset($location['controller']) ? $location['controller'] : 'index')
+			->setActionName(isset($location['action']) ? $location['action'] : 'index')
+			->setParams(isset($location['params']) ? (array) $location['params'] : [])
+        	->dispatch()
+        	->getReturnedValue();
 
-        $response = $dispatcher->getReturnedValue();
-        
         if ($response instanceof ResponseInterface) {
 			return $response->getContent();
         }

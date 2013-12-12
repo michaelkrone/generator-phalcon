@@ -6,12 +6,11 @@ use \Phalcon\Loader,
 	\Phalcon\DI,
 	\Phalcon\Mvc\View,
 	\Phalcon\Mvc\Dispatcher,
-	\Phalcon\Events\Manager,
 	\Phalcon\Config,
 	\Phalcon\DiInterface,
 	\Phalcon\Mvc\Url as UrlResolver,
 	\Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter,
-	\<%= project.namespace %>\Application\Interfaces\ApplicationModule;
+	\<%= project.namespace %>\Application\ApplicationModule;
 
 /**
  * Application module definition for multi module application
@@ -20,25 +19,23 @@ use \Phalcon\Loader,
 class Module extends ApplicationModule
 {
 	/**
-	 * Perform any pre module init customer specific logic here.
-	 */
-    public static function initCustomerConfiguration() {
-    	// @TODO: Insert customer configuration code
-    }
-
-	/**
-	 * Perform any pre module init logic here,
-	 * register the module specific configuration classes
-	 * and mount the module specific routes
+	 * Mount the module specific routes before the module is loaded
 	 *
 	 * @param \Phalcon\DiInterface  $di
 	 * @param \Phalcon\Config $config
 	 */
-	public static function initConfiguration(DiInterface $di, Config $config) {
+	public static function initRoutes(DiInterface $di)
+	{
 		$loader = new Loader();
-		$loader->registerNamespaces(['<%= project.namespace %>\<%= module.namespace %>' => __DIR__], true)
-			->register();
-		$di->getRouter()->mount(new ModuleRoutes());
+		$loader->registerNamespaces([
+			'<%= project.namespace %>\<%= module.namespace %>' => __DIR__,
+			'<%= project.namespace %>\<%= module.namespace %>\Controllers' => __DIR__ . '/controllers/',
+			'<%= project.namespace %>\<%= module.namespace %>\Controllers\API' => __DIR__ . '/controllers/api/'
+			], true)->register();
+
+		$di->getRouter()
+			->mount(new ModuleRoutes())
+			->addModuleResource('<%= module.slug %>', '\<%= project.namespace %>\<%= module.namespace %>\Controllers\API\Index', '/api');
 	}
 
 	/**
@@ -65,19 +62,22 @@ class Module extends ApplicationModule
 	public function registerServices($di)
 	{
 		/**
-		 * Read configurations
+		 * Read application wide and module only configurations
 		 */
 		$appConfig = $di->get('config');
+		$moduleConfig = include __DIR__ . '/config/config.php';
+
+		$di->set('moduleConfig', $moduleConfig);
 
 		/**
 		 * Setting up the view component
 		 */
 		$di->set('view', function() {
 			$view = new View();
-			$view->setViewsDir(<%= module.viewsDir %>);
-			$view->setLayoutsDir('../../../layouts/');
-			$view->setPartialsDir('../../../partials/');
-			$view->registerEngines(['.html' => 'Phalcon\Mvc\View\Engine\Php']);
+			$view->setViewsDir(<%= module.viewsDir %>)
+				->setLayoutsDir('../../../layouts/')
+				->setPartialsDir('../../../partials/')
+				->registerEngines(['.html' => 'Phalcon\Mvc\View\Engine\Php']);
 			return $view;
 		});
 
@@ -93,10 +93,9 @@ class Module extends ApplicationModule
 		/**
 		 * Module specific dispatcher
 		 */
-		$di->set('dispatcher', function () {
+		$di->set('dispatcher', function () use ($di) {
         	$dispatcher = new Dispatcher();
-	        $eventsManager = new Manager();
-	        $dispatcher->setEventsManager($eventsManager);
+	        $dispatcher->setEventsManager($di->getShared('eventsManager'));
 			$dispatcher->setDefaultNamespace('<%= project.namespace %>\<%= module.namespace %>\\');
 			return $dispatcher;
 		});
@@ -106,10 +105,10 @@ class Module extends ApplicationModule
 		 */
 		$di->set('db', function() use ($appConfig) {
 			return new DbAdapter([
-				'host' => $appConfig->database->host,
-				'username' => $appConfig->database->username,
-				'password' => $appConfig->database->password,
-				'dbname' => $appConfig->database->name
+				'host' => $moduleConfig->database->host,
+				'username' => $moduleConfig->database->username,
+				'password' => $moduleConfig->database->password,
+				'dbname' => $moduleConfig->database->name
 			]);
 		});
 	}

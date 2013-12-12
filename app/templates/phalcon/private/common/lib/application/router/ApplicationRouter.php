@@ -2,11 +2,15 @@
 
 namespace <%= project.namespace %>\Application\Router;
 
-use \Phalcon\Mvc\Router;
+use \Phalcon\Mvc\Router\Annotations as Router;
 
 /**
  * This class acts as the application router and defines global application routes.
- * Module specific routes are defined inside the ModuleRoutes classes.
+ * Module specific routes are defined inside the ModuleRoutes classes. Since this
+ * class extends the \Phalcon\Mvc\Router\Annotations class annotations are also allowed
+ * for routing. Therefore add the Controllers as resources in the ModuleRoutes by invoking
+ * addModuleResource on an instance of this class. Remember to register the controllers to the
+ * autoloader.
  */
 class ApplicationRouter extends Router {
 
@@ -34,7 +38,7 @@ class ApplicationRouter extends Router {
 			'module' => '<%= module.slug %>',
 			'namespace' => '<%= project.namespace %>\<%= module.namespace %>\Controllers\API\\'
 		])->setName('default-route');
-
+		
 		/**
 		 * Add default not found route
 		 */
