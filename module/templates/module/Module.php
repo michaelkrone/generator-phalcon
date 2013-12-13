@@ -30,7 +30,8 @@ class Module extends ApplicationModule
 			'<%= project.namespace %>\<%= module.namespace %>' => __DIR__,
 			'<%= project.namespace %>\<%= module.namespace %>\Controllers' => __DIR__ . '/controllers/',
 			'<%= project.namespace %>\<%= module.namespace %>\Controllers\API' => __DIR__ . '/controllers/api/'
-			], true)->register();
+			], true)
+			->register();
 
 		/**
 		 * Add ModuleRoutes Group and annotated controllers for parsing their routing information.
@@ -81,6 +82,7 @@ class Module extends ApplicationModule
 			$view->setViewsDir(<%= module.viewsDir %>)
 				->setLayoutsDir('../../../layouts/')
 				->setPartialsDir('../../../partials/')
+	            ->setTemplateAfter('main')
 				->registerEngines(['.html' => 'Phalcon\Mvc\View\Engine\Php']);
 			return $view;
 		});

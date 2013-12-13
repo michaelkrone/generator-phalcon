@@ -9,10 +9,10 @@ use \<%= project.namespace %>\<%= module.namespace %>\Controllers\ModuleApiContr
  *
  * @RoutePrefix("/<%= module.slug %>/api")
  */
-class IndexController extends ModuleApiController
+class <%= controller.name %>Controller extends ModuleApiController
 {
 	/**
-     * @Route("/test", methods={"GET"}, name="<%= module.slug %>-default")
+     * @Route("/<%= controller.slug %>", methods={"GET"}, name="<%= module.slug %>-<%= controller.slug %>")
      */
     public function indexAction()
     {

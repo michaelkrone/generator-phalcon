@@ -29,6 +29,16 @@ var ModuleGenerator = module.exports = function ModuleGenerator(args, options, c
 	if (options.projectName) {
   		this.project = this.getProjectObject(options.projectName);
   	}
+
+  	// call module generator
+    this.invoke('phalcon:controller', {
+      options: {
+        'skip-install': true,
+        'moduleName': this.module.name,
+        'projectName': this.project.name,
+        'controllerName': 'Index'
+      }
+    });
 };
 
 util.inherits(ModuleGenerator, yeoman.generators.Base);
@@ -119,19 +129,12 @@ ModuleGenerator.prototype.addModuleConfig = function addModuleConfig()
 };
 
 /*
- * Create module directory structure and module specific files,
- * copy the view files to the public resources
- */
+ * Create module directory structure and module specific files */
 ModuleGenerator.prototype.moduleFiles = function moduleFiles()
 {
   var dir = 'private/modules/' + this.module.slug;
   this.mkdir(dir);
   this.directory('module', dir);
-
-  /* copy the views dir to public resources */
-  dir = 'public/src/app/modules/' + this.module.slug + '/views';
-  this.mkdir(dir);
-  this.directory('views', dir);
 };
 
 ModuleGenerator.prototype.getProjectObject = function getProjectObject(projectName)
