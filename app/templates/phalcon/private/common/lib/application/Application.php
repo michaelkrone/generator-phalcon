@@ -31,7 +31,6 @@ class Application extends \Phalcon\Mvc\Application
 		parent::setDI($di);
         $di->set('app', $this);
 
-
 		/**
 		 * Register application wide accessible services
 		 */
@@ -92,6 +91,11 @@ class Application extends \Phalcon\Mvc\Application
 		 * Specify the use of metadata adapter
 		 */
 		$this->di->set('modelsMetadata', '\Phalcon\Mvc\Model\Metadata\\' . $config->application->models->metadata->adapter);
+
+		/**
+		 * Specify the annotations cache adapter
+		 */
+		$this->di->set('annotations', '\Phalcon\Annotations\Adapter\\' . $config->application->annotations->adapter);
 	}
 
 	/**
@@ -101,11 +105,13 @@ class Application extends \Phalcon\Mvc\Application
 	public function registerModules($modules, $merge = null)
 	{
 		parent::registerModules($modules, $merge);
+
 		$loader = new Loader();
 		$modules = $this->getModules();
 
 		foreach ($modules as $module) {
 			$className = $module['className'];
+
 			if ( $loader->registerClasses([ $className => $module['path'] ], true)->register()->autoLoad($className) ) {
 				/** @var \<%= project.namespace %>\Application\ApplicationModule $className */
 				$className::initRoutes($this->di);
@@ -135,17 +141,18 @@ class Application extends \Phalcon\Mvc\Application
       */
     public function request(array $location, array $data = null)
     {
-        $dispatcher = clone $this->di->get('dispatcher');
-		$response = $dispatcher
-			->setControllerName(isset($location['controller']) ? $location['controller'] : 'index')
-			->setActionName(isset($location['action']) ? $location['action'] : 'index')
-			->setParams(isset($location['params']) ? (array) $location['params'] : [])
-        	->dispatch()
-        	->getReturnedValue();
+		/** @var \Phalcon\Mvc\Dispatcher $dispatcher */
+		$dispatcher = clone $this->di->get('dispatcher');
+		$dispatcher->setControllerName(isset($location['controller']) ? $location['controller'] : 'index');
+		$dispatcher->setActionName(isset($location['action']) ? $location['action'] : 'index');
+		$dispatcher->setParams(isset($location['params']) ? (array) $location['params'] : []);
+		$dispatcher->dispatch();
 
-        if ($response instanceof ResponseInterface) {
+		$response = $dispatcher->getReturnedValue();
+
+		if ($response instanceof ResponseInterface) {
 			return $response->getContent();
-        }
+		}
 
 		return $response;
     }

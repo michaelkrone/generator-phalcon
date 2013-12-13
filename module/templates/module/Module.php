@@ -22,7 +22,6 @@ class Module extends ApplicationModule
 	 * Mount the module specific routes before the module is loaded
 	 *
 	 * @param \Phalcon\DiInterface  $di
-	 * @param \Phalcon\Config $config
 	 */
 	public static function initRoutes(DiInterface $di)
 	{
@@ -33,9 +32,14 @@ class Module extends ApplicationModule
 			'<%= project.namespace %>\<%= module.namespace %>\Controllers\API' => __DIR__ . '/controllers/api/'
 			], true)->register();
 
+		/**
+		 * Add ModuleRoutes Group and annotated controllers for parsing their routing information.
+		 * Be aware that the parsing will only be triggered if the request URI matches the third
+		 * parameter of addModuleResource.
+		 */
 		$di->getRouter()
 			->mount(new ModuleRoutes())
-			->addModuleResource('<%= module.slug %>', '\<%= project.namespace %>\<%= module.namespace %>\Controllers\API\Index', '/api');
+			->addModuleResource('<%= module.slug %>', '\<%= project.namespace %>\<%= module.namespace %>\Controllers\API\Index', '/<%= module.slug %>');
 	}
 
 	/**

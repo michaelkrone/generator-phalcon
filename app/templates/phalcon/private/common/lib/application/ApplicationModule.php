@@ -14,7 +14,8 @@ abstract class ApplicationModule extends UserModule implements ModuleDefinitionI
 {
     /**
      * Load the module specific routes and mount them to the router
-     * before the whole module gets loaded
+     * before the whole module gets loaded and add routing annotated
+     * controllers
      *
      * @param \Phalcon\DiInterface $di
      */

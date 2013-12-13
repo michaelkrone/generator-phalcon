@@ -7,12 +7,12 @@ use \<%= project.namespace %>\<%= module.namespace %>\Controllers\ModuleApiContr
 /**
  * Concrete implementation of <%= module.namespace %> module controller
  *
- * @RoutePrefix("/<%= module.slug %>")
+ * @RoutePrefix("/<%= module.slug %>/api")
  */
 class IndexController extends ModuleApiController
 {
 	/**
-     * @Route("/", methods={"GET"}, paths={module="<%= module.slug %>"}, name="<%= module.slug %>-default")
+     * @Route("/test", methods={"GET"}, name="<%= module.slug %>-default")
      */
     public function indexAction()
     {

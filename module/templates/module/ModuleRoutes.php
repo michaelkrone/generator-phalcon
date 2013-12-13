@@ -31,10 +31,10 @@ class ModuleRoutes extends Group
 		]);
 
 		/**
-		 * Default route: '<%= module.slug %>-default'
+		 * Default route: '<%= module.slug %>-root'
 		 */
 		$this->addGet('', [])
-			->setName('<%= module.slug %>-default');
+			->setName('<%= module.slug %>-root');
 
 		/**
 		 * Controller route: '<%= module.slug %>-controller'
