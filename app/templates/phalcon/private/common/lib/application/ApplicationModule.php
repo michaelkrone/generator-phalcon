@@ -3,21 +3,15 @@
 namespace <%= project.namespace %>\Application;
 
 use \Phalcon\Mvc\ModuleDefinitionInterface,
-    \Phalcon\Loader,
-    \Phalcon\DiInterface,
-    \Phalcon\Mvc\User\Module as UserModule;
+    \Phalcon\Mvc\User\Module as UserModule,
+    \<%= project.namespace %>\Application\RoutedModule;
 
 /**
  * Abstract application module base class
  */
-abstract class ApplicationModule extends UserModule implements ModuleDefinitionInterface
+abstract class ApplicationModule
+    extends UserModule
+    implements ModuleDefinitionInterface, RoutedModule
 {
-    /**
-     * Load the module specific routes and mount them to the router
-     * before the whole module gets loaded and add routing annotated
-     * controllers
-     *
-     * @param \Phalcon\DiInterface $di
-     */
-    abstract static function initRoutes(DiInterface $di);
+
 }

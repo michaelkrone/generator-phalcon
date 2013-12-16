@@ -81,11 +81,12 @@ PhalconGenerator.prototype.app = function app()
   this.privateDirs();
   
   /* copy .htaccess file as template */
-  this.template('phalcon/.htaccess', '.htaccess');
-  
+  this.template('phalcon/_htaccess', '.htaccess');
+
   /* build related files */
   this.copy('_package.json', 'package.json');
   this.copy('_bower.json', 'bower.json');
+  this.copy('_composer.json', 'composer.json');
 };
 
 /*

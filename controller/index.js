@@ -42,7 +42,6 @@ ControllerGenerator.prototype.askFor = function askFor()
 {
 	var prompts,
 		cb = this.async();
- 		console.log(this.controller, '\n', this.module, '\n');
 
  	if (!this.module || !this.project) {
  		console.log('Please answer these simple questions:\n');
@@ -120,6 +119,11 @@ ControllerGenerator.prototype.controllerFiles = function controllerFiles()
   var dir = 'private/modules/' + this.module.slug + '/controllers/api/';
   this.mkdir(dir);
   this.template('controllers/api/IndexController.php', dir + this.controller.fileName);
+
+  dir = 'private/test/modules/' + this.module.slug + '/';
+  this.mkdir(dir);
+  this.template('test/ControllerTest.php', dir + this.controller.name + 'Test.php');
+
 };
 
 /*

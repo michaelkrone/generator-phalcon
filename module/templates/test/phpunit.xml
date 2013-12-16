@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="../../helpers/TestHelper.php"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         verbose="true"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="true">
+    <testsuites>
+        <testsuite name="<%= project.name %> - <%= module.name %> - Testsuite">
+            <directory>./</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

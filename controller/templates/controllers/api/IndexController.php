@@ -12,7 +12,7 @@ use \<%= project.namespace %>\<%= module.namespace %>\Controllers\ModuleApiContr
 class <%= controller.name %>Controller extends ModuleApiController
 {
 	/**
-     * @Route("/<%= controller.slug %>", methods={"GET"}, name="<%= module.slug %>-<%= controller.slug %>")
+     * @Route("/<%= controller.slug %>", paths={module="<%= module.slug %>"}, methods={"GET"}, name="<%= module.slug %>-<%= controller.slug %>")
      */
     public function indexAction()
     {

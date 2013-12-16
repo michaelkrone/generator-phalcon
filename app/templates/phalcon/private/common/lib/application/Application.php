@@ -143,6 +143,15 @@ class Application extends \Phalcon\Mvc\Application
     {
 		/** @var \Phalcon\Mvc\Dispatcher $dispatcher */
 		$dispatcher = clone $this->di->get('dispatcher');
+
+        if (isset($location['module'])) {
+            $dispatcher->setModuleName($location['module']);    
+        }
+
+        if (isset($location['namespace'])) {
+            $dispatcher->setNamespaceName($location['namespace']);
+        }
+
 		$dispatcher->setControllerName(isset($location['controller']) ? $location['controller'] : 'index');
 		$dispatcher->setActionName(isset($location['action']) ? $location['action'] : 'index');
 		$dispatcher->setParams(isset($location['params']) ? (array) $location['params'] : []);

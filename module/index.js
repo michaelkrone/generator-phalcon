@@ -135,6 +135,7 @@ ModuleGenerator.prototype.moduleFiles = function moduleFiles()
   var dir = 'private/modules/' + this.module.slug;
   this.mkdir(dir);
   this.directory('module', dir);
+  this.directory('test', 'private/test/modules/' + this.module.slug);
 };
 
 ModuleGenerator.prototype.getProjectObject = function getProjectObject(projectName)
