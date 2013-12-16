@@ -42,6 +42,7 @@ ControllerGenerator.prototype.askFor = function askFor()
 {
 	var prompts,
 		cb = this.async();
+ 		console.log(this.controller, '\n', this.module, '\n');
 
  	if (!this.module || !this.project) {
  		console.log('Please answer these simple questions:\n');

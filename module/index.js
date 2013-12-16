@@ -12,6 +12,16 @@ var ModuleGenerator = module.exports = function ModuleGenerator(args, options, c
 	this.on('end', function () {
 	    this.installDependencies({ skipInstall: options['skip-install'] });
 		console.log('The module ' + (this.module.slug).yellow.bold + ' has been created.');
+
+		// call controller generator
+	    this.invoke('phalcon:controller', {
+	      options: {
+	        'skip-install': true,
+	        'moduleName': this.module.name,
+	        'projectName': this.project.name,
+	        'controllerName': 'Index'
+	      }
+	    });
 	});
 	
 	console.log(
@@ -28,17 +38,7 @@ var ModuleGenerator = module.exports = function ModuleGenerator(args, options, c
 
 	if (options.projectName) {
   		this.project = this.getProjectObject(options.projectName);
-  	}
-
-  	// call module generator
-    this.invoke('phalcon:controller', {
-      options: {
-        'skip-install': true,
-        'moduleName': this.module.name,
-        'projectName': this.project.name,
-        'controllerName': 'Index'
-      }
-    });
+  	} 	
 };
 
 util.inherits(ModuleGenerator, yeoman.generators.Base);
