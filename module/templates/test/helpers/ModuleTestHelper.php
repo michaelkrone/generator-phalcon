@@ -5,7 +5,7 @@ use Phalcon\DI,
 ini_set('display_errors',1);
 error_reporting(E_ALL);
 
-define('ROOT_PATH', __DIR__ . '/../../');
+define('ROOT_PATH', __DIR__ . '/../../../../');
 define('PATH_LIBRARY', __DIR__ . '/common/lib/application/');
 
 set_include_path(
@@ -20,7 +20,9 @@ $loader = new \Phalcon\Loader();
 $loader->registerClasses([
     'Phalcon\Test\UnitTestCase' => ROOT_PATH . 'test/phalcon/UnitTestCase.php',
     '<%= project.namespace %>\Test\Helper\UnitTestCase' => ROOT_PATH . 'test/helpers/UnitTestCase.php',
-    '<%= project.namespace %>\Application\Application' => ROOT_PATH . 'common/lib/application/Application.php'
+    '<%= project.namespace %>\Application\Application' => ROOT_PATH . 'common/lib/application/Application.php',
+    '<%= project.namespace %>\<%= module.namespace %>\Test\Helper\ModuleUnitTestCase' => ROOT_PATH . 'test/modules/<%= module.slug %>/helpers/ModuleUnitTestCase.php',
+    '<%= project.namespace %>\<%= module.namespace %>\Module' => ROOT_PATH . 'modules/<%= module.slug %>/Module.php'
 ])->register();
 
 $di = new FactoryDefault();
