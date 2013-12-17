@@ -59,6 +59,29 @@ Please answer these simple questions:
 [?] How would you like to name your module? (Enter the namespace of your new module, eg. MyNewModule)
 ```
 
+### Controller Subgenerator
+
+If you would like to add another controller to your project, just issue the module subgenerator like this:
+
+```
+$ yo phalcon:controller
+```
+
+This will kickstart the module generator which will include a new module in your project. This works for every project created by the generator-phalcon generator.
+
+The subgenerator will ask you about the project namespace and the namespace of the new module:
+
+```
+I will create a new Phalcon controller for your application.
+
+Please answer these simple questions:
+
+[?] What is the namespace of the project this controller should belong to? (Enter the global namespace of the project, eg. MyApplication)
+[?] How is the namespace of the module your controller should belong to? (Enter the namespace of your new module, eg. MyNewModule)
+[?] What is the name of your controller (Without "Controller" suffix)? (Enter the simple controller name, eg. Auth)
+
+```
+
 ### About the generated project
 
 As every Yeoman generator, this generator is opinionated about how you should manage your application, be it directory structure, class inheritance or every other detail of your application.
@@ -66,62 +89,82 @@ As Phalcon is a very flexible framework feel free to adjust the project to your 
 The project generated with the generator-phalcon generator will have the following structure:
 ```
 .
-├── .htaccess
-└── private
-   └── common
-      ├── lib
-      └── application
-         └── controllers
-            ├── ApplicationApiController.php
-            └── ApplicationController.php
-         └── interfaces
-            ├── ApplicationModule.php
-            ├── ConfigurationInitable.php
-            └── CustomerConfigurationInitable.php
-         └── models
-            └── ApplicationModel.php
-         └── router
-            └── ApplicationRouter.php
-         └── Application.php
-   └── config
-   └── modules
-      └── modulename
-         └── config
-            └── config.php
-         └── controllers
-            ├── api
-            ├── ModuleApiController.php
-            └── ModuleController.php
-         ├── lib
-         └── models
-            └── ModuleModel.php
-         ├── test
-         ├── Module.php
-         └── ModuleRoutes.php         
+├── bower.json
+├── composer.json
+├── package.json
+├── private
+│   ├── common
+│   │   └── lib
+│   │       └── application
+│   │           ├── ApplicationModule.php
+│   │           ├── Application.php
+│   │           ├── controllers
+│   │           │   ├── ApplicationApiController.php
+│   │           │   └── ApplicationController.php
+│   │           ├── models
+│   │           │   └── ApplicationModel.php
+│   │           ├── RoutedModule.php
+│   │           └── router
+│   │               └── ApplicationRouter.php
+│   ├── config
+│   │   ├── config.php
+│   │   └── modules.php
+│   ├── modules
+│   │   └── main
+│   │       ├── config
+│   │       │   └── config.php
+│   │       ├── controllers
+│   │       │   ├── api
+│   │       │   │   └── IndexController.php
+│   │       │   ├── ModuleApiController.php
+│   │       │   └── ModuleController.php
+│   │       ├── lib
+│   │       ├── models
+│   │       │   └── ModuleModel.php
+│   │       ├── Module.php
+│   │       └── ModuleRoutes.php
+│   └── test
+│       ├── application
+│       │   ├── ApplicationTest.php
+│       │   └── phpunit.xml
+│       ├── helpers
+│       │   ├── TestHelper.php
+│       │   └── UnitTestCase.php
+│       ├── modules
+│       │   └── main
+│       │       ├── helpers
+│       │       │   ├── ModuleTestHelper.php
+│       │       │   └── ModuleUnitTestCase.php
+│       │       ├── IndexTest.php
+│       │       ├── ModuleTest.php
+│       │       └── phpunit.xml
+│       └── phalcon
+│           ├── FunctionalTestCase.php
+│           ├── ModelTestCase.php
+│           └── UnitTestCase.php
 └── public
-   ├── .htaccess
-   ├── assets
-   ├── common
-   ├── styles
-   └── src
-      └── app
-         └── layouts
-            └── index.html
-         └── modules
-            └── modulename
-               └── views
-                  └── index
-                     └── index.html
-         └── partials
-            └── index.html
+    ├── assets
+    ├── common
+    ├── index.php
+    ├── src
+    │   └── app
+    │       ├── layouts
+    │       │   └── main.html
+    │       ├── modules
+    │       │   └── main
+    │       │       └── views
+    │       │           └── index
+    │       │               └── index.html
+    │       └── partials
+    │           └── index.html
+    └── styles
 
 ```
 
 ### Todo
 
-   * Subgenerators for models, controllers, maybe routes
-   * Automatically generate tests
    * Documentation
+   * Subgenerators for models, routes
 
 ### Getting To Know Yeoman
 
