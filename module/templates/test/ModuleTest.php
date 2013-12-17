@@ -2,16 +2,26 @@
 
 namespace <%= project.namespace %>\<%= module.namespace %>\Test;
 
-use <%= project.namespace %>\<%= module.namespace %>\Test\Helper\ModuleUnitTestCase;
+use Phalcon\DI,
+	<%= project.namespace %>\<%= module.namespace %>\Test\Helper\ModuleUnitTestCase;
 
 /**
- * Test class for Application class
- * @covers <%= project.namespace %>\<%= module.namespace %>\Module
+ * Test class for <%= module.namespace %> Module class
  */
 class ModuleTest extends ModuleUnitTestCase {
 
-	public function testModule()
+	/**
+	 * Test class for module routes
+	 * @covers <%= project.namespace %>\<%= module.namespace %>\Module::initRoutes
+	 */
+	public function testModuleRoutes()
 	{
-	    $this->assertEquals(0, 0);
+		$di = $this->application->di;
+		$router = $di->get('router');
+
+	    $router->handle('/');
+	    $this->assertEquals('<%= module.slug %>', $router->getModuleName());
+	    $this->assertEquals('index', $router->getControllerName());
+	    $this->assertEquals('index', $router->getActionName());
 	}
 }

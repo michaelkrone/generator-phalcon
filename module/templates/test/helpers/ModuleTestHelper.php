@@ -17,12 +17,15 @@ set_include_path(
  * bootstrap and test helper classes
  */
 $loader = new \Phalcon\Loader();
-$loader->registerClasses([
-    'Phalcon\Test\UnitTestCase' => ROOT_PATH . 'test/phalcon/UnitTestCase.php',
-    '<%= project.namespace %>\Test\Helper\UnitTestCase' => ROOT_PATH . 'test/helpers/UnitTestCase.php',
-    '<%= project.namespace %>\Application\Application' => ROOT_PATH . 'common/lib/application/Application.php',
-    '<%= project.namespace %>\<%= module.namespace %>\Test\Helper\ModuleUnitTestCase' => ROOT_PATH . 'test/modules/<%= module.slug %>/helpers/ModuleUnitTestCase.php',
-    '<%= project.namespace %>\<%= module.namespace %>\Module' => ROOT_PATH . 'modules/<%= module.slug %>/Module.php'
+$loader->registerNamespaces([
+    'Phalcon\Test' => ROOT_PATH . 'test/phalcon/',
+    '<%= project.namespace %>\Application' => ROOT_PATH . 'common/lib/application/',
+    '<%= project.namespace %>\Application\Controllers' => ROOT_PATH . 'common/lib/application/controllers/',
+    '<%= project.namespace %>\Test\Helper' => ROOT_PATH . 'test/helpers/',
+    '<%= project.namespace %>\<%= module.namespace %>\Controllers\API' => ROOT_PATH . 'modules/<%= module.slug %>/controllers/api/',
+    '<%= project.namespace %>\<%= module.namespace %>\Controllers' => ROOT_PATH . 'modules/<%= module.slug %>/controllers/',
+    '<%= project.namespace %>\<%= module.namespace %>\Test\Helper' => ROOT_PATH . 'test/modules/<%= module.slug %>/helpers/',
+    '<%= project.namespace %>\<%= module.namespace %>' => ROOT_PATH . 'modules/<%= module.slug %>/'
 ])->register();
 
 $di = new FactoryDefault();

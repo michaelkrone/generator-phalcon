@@ -17,6 +17,8 @@ abstract class UnitTestCase extends PhalconTestCase {
      */
     protected $_config;
 
+    protected $application;
+
     /**
      * @var bool
      */
@@ -28,11 +30,15 @@ abstract class UnitTestCase extends PhalconTestCase {
         $di = DI::getDefault();
 
         // get any DI components here. If you have a config, be sure to pass it to the parent
-        $application = new Application($di);
+        $this->application = new Application($di);
 
-        parent::setUp($application->di, $application->config);
+        parent::setUp($this->application->di, $this->application->config);
 
         $this->_loaded = true;
+    }
+
+    public function tearDown() {
+        $this->application = null;
     }
 
     /**

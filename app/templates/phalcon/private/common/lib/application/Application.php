@@ -112,10 +112,12 @@ class Application extends \Phalcon\Mvc\Application
 		foreach ($modules as $module) {
 			$className = $module['className'];
 
-			if ( $loader->registerClasses([ $className => $module['path'] ], true)->register()->autoLoad($className) ) {
-				/** @var \<%= project.namespace %>\Application\ApplicationModule $className */
-				$className::initRoutes($this->di);
-			}
+			if (!class_exists($className, false)) {
+                $loader->registerClasses([ $className => $module['path'] ], true)->register()->autoLoad($className);
+            }
+
+			/** @var \<%= project.namespace %>\Application\ApplicationModule $className */
+			$className::initRoutes($this->di);
 		}
 	}
 

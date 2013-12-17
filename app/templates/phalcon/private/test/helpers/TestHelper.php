@@ -17,10 +17,10 @@ set_include_path(
  * bootstrap and test helper classes
  */
 $loader = new \Phalcon\Loader();
-$loader->registerClasses([
-    'Phalcon\Test\UnitTestCase' => ROOT_PATH . 'test/phalcon/UnitTestCase.php',
-    '<%= project.namespace %>\Test\Helper\UnitTestCase' => ROOT_PATH . 'test/helpers/UnitTestCase.php',
-    '<%= project.namespace %>\Application\Application' => ROOT_PATH . 'common/lib/application/Application.php'
+$loader->registerNamespaces([
+    'Phalcon\Test' => ROOT_PATH . 'test/phalcon/',
+    '<%= project.namespace %>\Test\Helper' => ROOT_PATH . 'test/helpers/',
+    '<%= project.namespace %>\Application' => ROOT_PATH . 'common/lib/application/'
 ])->register();
 
 $di = new FactoryDefault();
