@@ -2,10 +2,10 @@
 
 <project name="Ant build file for Jenkins builds" default="build">
  <target name="build"
-	 depends="prepare,lint,phpunit,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpcb"/>
+	 depends="prepare,lint,phpunit,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox"/>
 
  <target name="build-parallel"
-	 depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
+	 depends="prepare,lint,tools-parallel,phpunit"/>
 
  <target name="tools-parallel" description="Run tools in parallel">
 	<parallel threadCount="2">
@@ -94,13 +94,14 @@
 
  <target name="phpcs" description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
 	<exec executable="phpcs">
+     <arg value="--report=checkstyle" />
 	 <arg value="--standard=${basedir}/build/phpcs.xml" />
 	 <arg path="${basedir}/private" />
 	</exec>
  </target>
 
  <target name="phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
-	<exec executable="phpcs" output="/dev/null">
+	<exec executable="phpcs">
 	 <arg value="--report=checkstyle" />
 	 <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
 	 <arg value="--standard=${basedir}/build/phpcs.xml" />
