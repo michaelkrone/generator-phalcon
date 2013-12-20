@@ -79,6 +79,8 @@ PhalconGenerator.prototype.app = function app()
 {
   this.publicDirs();
   this.privateDirs();
+  this.testDirs();
+  this.buildDirs();
   
   /* copy .htaccess file as template */
   this.template('phalcon/_htaccess', '.htaccess');
@@ -87,6 +89,7 @@ PhalconGenerator.prototype.app = function app()
   this.copy('_package.json', 'package.json');
   this.copy('_bower.json', 'bower.json');
   this.copy('_composer.json', 'composer.json');
+  this.copy('_build.xml', 'build.xml');
 };
 
 /*
@@ -110,6 +113,26 @@ PhalconGenerator.prototype.privateDirs = function privateDirs()
   var dir = 'private';
   this.mkdir(dir);
   this.directory('phalcon/private', dir);
+};
+
+/*
+ * Create private directory structure
+ */
+PhalconGenerator.prototype.testDirs = function testDirs()
+{
+  var dir = 'test';
+  this.mkdir(dir);
+  this.directory('phalcon/test', dir);
+};
+
+/*
+ * Create private directory structure
+ */
+PhalconGenerator.prototype.buildDirs = function buildDirs()
+{
+  var dir = 'build';
+  this.mkdir(dir);
+  this.directory('build', dir);
 };
 
 PhalconGenerator.prototype.projectfiles = function projectfiles()

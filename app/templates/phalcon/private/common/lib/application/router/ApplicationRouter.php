@@ -12,13 +12,14 @@ use \Phalcon\Mvc\Router\Annotations as Router;
  * addModuleResource on an instance of this class. Remember to register the controllers to the
  * autoloader.
  */
-class ApplicationRouter extends Router {
-
+class ApplicationRouter extends Router
+{
 	/**
 	 * Creates a new instance of ApplicationRouter class and defines standard application routes
 	 * @param boolean $defaultRoutes
 	 */
-	public function __construct($defaultRoutes = false) {
+	public function __construct($defaultRoutes = false)
+	{
 		parent::__construct($defaultRoutes);
 
 		$this->removeExtraSlashes(true);

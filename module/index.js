@@ -129,13 +129,14 @@ ModuleGenerator.prototype.addModuleConfig = function addModuleConfig()
 };
 
 /*
- * Create module directory structure and module specific files */
+ * Create module directory structure and module specific files
+ */
 ModuleGenerator.prototype.moduleFiles = function moduleFiles()
 {
   var dir = 'private/modules/' + this.module.slug;
   this.mkdir(dir);
   this.directory('module', dir);
-  this.directory('test', 'private/test/modules/' + this.module.slug);
+  this.directory('test', 'test/modules/' + this.module.slug);
 };
 
 ModuleGenerator.prototype.getProjectObject = function getProjectObject(projectName)

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<phpdox xmlns="http://phpdox.net/config">
+ <project name="API Docs" source="${basedir}/../private" workdir="build/phpdox">
+
+  <collector publiconly="false">
+   <include mask="*.php" />   
+  </collector>
+
+  <generator output="build">
+
+   <enrich base="${basedir}">
+		<!--
+	    <source type="build" />
+
+	    <source type="svn" />
+
+		
+	    <source type="phpunit">
+	        <file name="logs/junit.xml" />
+	    </source>
+		-->
+	    <source type="phploc">
+	    	<file name="logs/phploc.xml" />
+	    </source>
+
+	    <source type="checkstyle">
+	        <file name="logs/checkstyle.xml" />
+	    </source>
+
+	    <source type="pmd">
+	        <file name="logs/pmd.xml" />
+	    </source>
+	</enrich>
+
+   <build engine="html" enabled="true" output="api"/>
+
+  </generator>
+ </project>
+</phpdox>

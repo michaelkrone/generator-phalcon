@@ -5,7 +5,7 @@ use Phalcon\DI,
 ini_set('display_errors',1);
 error_reporting(E_ALL);
 
-define('ROOT_PATH', __DIR__ . '/../../');
+define('ROOT_PATH', __DIR__ . '/../../private/');
 define('PATH_LIBRARY', __DIR__ . '/common/lib/application/');
 
 set_include_path(
@@ -18,8 +18,8 @@ set_include_path(
  */
 $loader = new \Phalcon\Loader();
 $loader->registerNamespaces([
-    'Phalcon\Test' => ROOT_PATH . 'test/phalcon/',
-    '<%= project.namespace %>\Test\Helper' => ROOT_PATH . 'test/helpers/',
+    'Phalcon\Test' => ROOT_PATH . '../test/phalcon/',
+    '<%= project.namespace %>\Test\Helper' => ROOT_PATH . '../test/helpers/',
     '<%= project.namespace %>\Application' => ROOT_PATH . 'common/lib/application/'
 ])->register();
 

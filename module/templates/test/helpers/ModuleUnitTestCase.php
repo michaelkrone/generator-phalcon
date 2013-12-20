@@ -6,8 +6,8 @@ use Phalcon\DI,
 	\<%= project.namespace %>\Application\Application,
 	\<%= project.namespace %>\<%= module.namespace %>\Module;
 
-abstract class ModuleUnitTestCase extends PhalconTestCase {
-
+abstract class ModuleUnitTestCase extends PhalconTestCase
+{
 	/**
 	 * @var \Voice\Cache
 	 */

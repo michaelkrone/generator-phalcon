@@ -5,8 +5,8 @@ use Phalcon\DI,
     \Phalcon\Test\UnitTestCase as PhalconTestCase,
     \<%= project.namespace %>\Application\Application;
 
-abstract class UnitTestCase extends PhalconTestCase {
-
+abstract class UnitTestCase extends PhalconTestCase
+{
     /**
      * @var \Voice\Cache
      */

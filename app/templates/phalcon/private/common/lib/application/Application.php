@@ -18,18 +18,18 @@ use \Phalcon\Mvc\Url as UrlResolver,
 class Application extends \Phalcon\Mvc\Application
 {
 	/**
-     * Application Constructor
-     *
+	 * Application Constructor
+	 *
 	 * @param \Phalcon\DiInterface $di
-     */
-    public function __construct(DiInterface $di)
-    {
+	 */
+	public function __construct(DiInterface $di)
+	{
 		/**
 		 * Sets the parent DI and register the app itself as a service,
 		 * necessary for redirecting HMVC requests
 		 */
 		parent::setDI($di);
-        $di->set('app', $this);
+		$di->set('app', $this);
 
 		/**
 		 * Register application wide accessible services
@@ -40,7 +40,7 @@ class Application extends \Phalcon\Mvc\Application
 		 * Register the installed/configured modules
 		 */
 		$this->registerModules(require __DIR__ . '/../../../config/modules.php');
-    }
+	}
 
 	/**
 	 * Register the services here to make them general or register in the
@@ -61,17 +61,17 @@ class Application extends \Phalcon\Mvc\Application
 		$eventsManager->enablePriorities(true);
 		$this->setEventsManager($eventsManager);
 
-        /**
-         * Register namespaces for application classes
-         */
-        $loader = new Loader();
-        $loader->registerNamespaces([
-                'GastroKey\Application' => __DIR__,
-                'GastroKey\Application\Controllers' => __DIR__ . '/controllers/',
-                'GastroKey\Application\Models' => __DIR__ . '/models/',
-                'GastroKey\Application\Router' => __DIR__ . '/router/'
-            ], true)
-            ->register();
+		/**
+		 * Register namespaces for application classes
+		 */
+		$loader = new Loader();
+		$loader->registerNamespaces([
+				'<%=project.namespace %>\Application' => __DIR__,
+				'<%=project.namespace %>\Application\Controllers' => __DIR__ . '/controllers/',
+				'<%=project.namespace %>\Application\Models' => __DIR__ . '/models/',
+				'<%=project.namespace %>\Application\Router' => __DIR__ . '/router/'
+			], true)
+			->register();
 
 		/**
 		 * Start the session the first time some component request the session service
@@ -109,12 +109,17 @@ class Application extends \Phalcon\Mvc\Application
 		$loader = new Loader();
 		$modules = $this->getModules();
 
+		/**
+		 * Iterate the application modules and register the routes
+		 * by calling the initRoutes method of the Module class.
+		 * We need to auto load the class 
+		 */
 		foreach ($modules as $module) {
 			$className = $module['className'];
 
 			if (!class_exists($className, false)) {
-                $loader->registerClasses([ $className => $module['path'] ], true)->register()->autoLoad($className);
-            }
+				$loader->registerClasses([ $className => $module['path'] ], true)->register()->autoLoad($className);
+			}
 
 			/** @var \<%= project.namespace %>\Application\ApplicationModule $className */
 			$className::initRoutes($this->di);
@@ -130,33 +135,44 @@ class Application extends \Phalcon\Mvc\Application
 	}
 
 	 /**
-      * Does a HMVC request inside the application
-      *
-      * Inside a controller we might do
-      * <code>
-      * $this->app->request([ 'controller' => 'do', 'action' => 'something' ], 'param');
-      * </code>
-      *
-      * @param array $location Array with the route information: 'controller', 'action', 'params'
-      * @param array $data Additional request meta data (not used yet)
-      * @return mixed
-      */
-    public function request(array $location, array $data = null)
-    {
+	  * Does a HMVC request inside the application
+	  *
+	  * Inside a controller we might do
+	  * <code>
+	  * $this->app->request([ 'controller' => 'do', 'action' => 'something' ], 'param');
+	  * </code>
+	  *
+	  * @param array $location Array with the route information: 'namespace', 'module', 'controller', 'action', 'params'
+	  * @return mixed
+	  */
+	public function request(array $location)
+	{
 		/** @var \Phalcon\Mvc\Dispatcher $dispatcher */
 		$dispatcher = clone $this->di->get('dispatcher');
 
-        if (isset($location['module'])) {
-            $dispatcher->setModuleName($location['module']);    
-        }
+		if (isset($location['module'])) {
+			$dispatcher->setModuleName($location['module']);
+		}
 
-        if (isset($location['namespace'])) {
-            $dispatcher->setNamespaceName($location['namespace']);
-        }
+		if (isset($location['namespace'])) {
+			$dispatcher->setNamespaceName($location['namespace']);
+		}
 
-		$dispatcher->setControllerName(isset($location['controller']) ? $location['controller'] : 'index');
-		$dispatcher->setActionName(isset($location['action']) ? $location['action'] : 'index');
-		$dispatcher->setParams(isset($location['params']) ? (array) $location['params'] : []);
+		if (!isset($location['controller'])) {
+			$location['controller'] = 'index';
+		}
+
+		if (!isset($location['action'])) {
+			$location['action'] = 'index';
+		}
+
+		if (!isset($location['params'])) {
+			$location['params'] = [];
+		}
+
+		$dispatcher->setControllerName($location['controller']);        	
+		$dispatcher->setActionName($location['action']);
+		$dispatcher->setParams((array) $location['params']);
 		$dispatcher->dispatch();
 
 		$response = $dispatcher->getReturnedValue();
@@ -166,6 +182,5 @@ class Application extends \Phalcon\Mvc\Application
 		}
 
 		return $response;
-    }
-
+	}
 }

@@ -6,12 +6,13 @@ use <%= project.namespace %>\<%= module.namespace %>\Test\Helper\ModuleUnitTestC
 
 /**
  * Test class for Application class
- * @covers <%= project.namespace %>\<%= module.namespace %>\Controllers\API\<%= controller.fullName %>
+ *
+ * @coversDefaultClass \<%= project.namespace %>\<%= module.namespace %>\Controllers\API\<%= controller.fullName %>
  */
-class <%= controller.name %>ControllerTest extends ModuleUnitTestCase {
-
+class <%= controller.name %>ControllerTest extends ModuleUnitTestCase
+{
 	public function testController()
 	{
-	    $this->assertEquals(0, 0);
+	    $this->assertTrue(false);
 	}
 }
