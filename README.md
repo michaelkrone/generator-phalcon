@@ -67,9 +67,9 @@ If you would like to add another controller to your project, just issue the modu
 $ yo phalcon:controller
 ```
 
-This will kickstart the module generator which will include a new module in your project. This works for every project created by the generator-phalcon generator.
+This will kickstart the controller generator which will include a new controller in one of your projects modules.
 
-The subgenerator will ask you about the project namespace and the namespace of the new module:
+The subgenerator will ask you about the project namespace, the namespace of the new module and the controller name:
 
 ```
 I will create a new Phalcon controller for your application.
@@ -82,82 +82,92 @@ Please answer these simple questions:
 
 ```
 
+### Build the project
+
+By now the project can be build with Ant. The build directory contains some PHP specific configurations for PHP MessDetector, PHPDox and CodeSniffer.
+
 ### About the generated project
 
 As every Yeoman generator, this generator is opinionated about how you should manage your application, be it directory structure, class inheritance or every other detail of your application.
 As Phalcon is a very flexible framework feel free to adjust the project to your needs.
 The project generated with the generator-phalcon generator will have the following structure:
+
 ```
 .
 ├── bower.json
+├── build
+│   ├── phpcs.xml
+│   ├── phpdox.xml
+│   └── phpmd.xml
+├── build.xml
 ├── composer.json
 ├── package.json
 ├── private
-│   ├── common
-│   │   └── lib
-│   │       └── application
-│   │           ├── ApplicationModule.php
-│   │           ├── Application.php
-│   │           ├── controllers
-│   │           │   ├── ApplicationApiController.php
-│   │           │   └── ApplicationController.php
-│   │           ├── models
-│   │           │   └── ApplicationModel.php
-│   │           ├── RoutedModule.php
-│   │           └── router
-│   │               └── ApplicationRouter.php
-│   ├── config
-│   │   ├── config.php
-│   │   └── modules.php
-│   ├── modules
-│   │   └── main
-│   │       ├── config
-│   │       │   └── config.php
-│   │       ├── controllers
-│   │       │   ├── api
-│   │       │   │   └── IndexController.php
-│   │       │   ├── ModuleApiController.php
-│   │       │   └── ModuleController.php
-│   │       ├── lib
-│   │       ├── models
-│   │       │   └── ModuleModel.php
-│   │       ├── Module.php
-│   │       └── ModuleRoutes.php
-│   └── test
-│       ├── application
-│       │   ├── ApplicationTest.php
-│       │   └── phpunit.xml
-│       ├── helpers
-│       │   ├── TestHelper.php
-│       │   └── UnitTestCase.php
-│       ├── modules
-│       │   └── main
-│       │       ├── helpers
-│       │       │   ├── ModuleTestHelper.php
-│       │       │   └── ModuleUnitTestCase.php
-│       │       ├── IndexTest.php
-│       │       ├── ModuleTest.php
-│       │       └── phpunit.xml
-│       └── phalcon
-│           ├── FunctionalTestCase.php
-│           ├── ModelTestCase.php
-│           └── UnitTestCase.php
-└── public
-    ├── assets
-    ├── common
-    ├── index.php
-    ├── src
-    │   └── app
-    │       ├── layouts
-    │       │   └── main.html
-    │       ├── modules
-    │       │   └── main
-    │       │       └── views
-    │       │           └── index
-    │       │               └── index.html
-    │       └── partials
-    │           └── index.html
-    └── styles
+│   ├── common
+│   │   └── lib
+│   │       └── application
+│   │           ├── ApplicationModule.php
+│   │           ├── Application.php
+│   │           ├── controllers
+│   │           │   ├── ApplicationApiController.php
+│   │           │   └── ApplicationController.php
+│   │           ├── models
+│   │           │   └── ApplicationModel.php
+│   │           ├── RoutedModule.php
+│   │           └── router
+│   │               └── ApplicationRouter.php
+│   ├── config
+│   │   ├── config.php
+│   │   └── modules.php
+│   └── modules
+│       └── mainmodule
+│           ├── config
+│           │   └── config.php
+│           ├── controllers
+│           │   ├── api
+│           │   │   └── IndexController.php
+│           │   ├── ModuleApiController.php
+│           │   └── ModuleController.php
+│           ├── lib
+│           ├── models
+│           │   └── ModuleModel.php
+│           ├── Module.php
+│           └── ModuleRoutes.php
+├── public
+│   ├── assets
+│   ├── common
+│   ├── index.php
+│   ├── src
+│   │   └── app
+│   │       ├── layouts
+│   │       │   └── main.html
+│   │       ├── modules
+│   │       │   └── mainmodule
+│   │       │       └── views
+│   │       │           └── index
+│   │       │               └── index.html
+│   │       └── partials
+│   │           └── index.html
+│   └── styles
+└── test
+    ├── application
+    │   ├── ApplicationTest.php
+    │   └── phpunit.xml
+    ├── helpers
+    │   ├── TestHelper.php
+    │   └── UnitTestCase.php
+    ├── modules
+    │   └── mainmodule
+    │       ├── helpers
+    │       │   ├── ModuleTestHelper.php
+    │       │   └── ModuleUnitTestCase.php
+    │       ├── IndexControllerTest.php
+    │       ├── ModuleTest.php
+    │       └── phpunit.xml
+    └── phalcon
+        ├── FunctionalTestCase.php
+        ├── ModelTestCase.php
+        └── UnitTestCase.php
 
 ```
 
@@ -165,6 +175,7 @@ The project generated with the generator-phalcon generator will have the followi
 
    * Documentation
    * Subgenerators for models, routes
+   * Generators for client side scripts
 
 ### Getting To Know Yeoman
 
