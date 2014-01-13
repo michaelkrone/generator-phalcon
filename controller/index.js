@@ -120,9 +120,9 @@ ControllerGenerator.prototype.controllerFiles = function controllerFiles()
   this.mkdir(dir);
   this.template('controllers/api/IndexController.php', dir + this.controller.fileName);
 
-  dir = 'private/test/modules/' + this.module.slug + '/';
+  dir = 'test/modules/' + this.module.slug + '/';
   this.mkdir(dir);
-  this.template('test/ControllerTest.php', dir + this.controller.name + 'Test.php');
+  this.template('test/ControllerTest.php', dir + this.controller.name + 'ControllerTest.php');
 
 };
 
