@@ -136,6 +136,30 @@ ControllerGenerator.prototype.viewFiles = function viewFiles()
   this.mkdir(dir);
   this.template('views/index/index.html', dir + '/index.html');
 };
+
+/*
+ * Add a controller config entry to the module routed controller configuration.
+ */
+ControllerGenerator.prototype.addModuleConfig = function addModuleConfig()
+{
+	var file = 'private/modules/' + this.module.slug + '/config/config.php',
+		replaceString = "'annotationRouted' => [",
+	 	ctrlString = "'annotationRouted' => [\n\t\t\t" + 
+	 		"'\\" + this.project.namespace + "\\" + this.module.namespace + "\\Controllers\\API\\" + this.controller.name + "',";
+
+	fs.readFile(file, 'utf8', function (err, data) {
+		if (err) {
+			return console.log(err);
+		} else {
+			var result = data.replace(replaceString, ctrlString);
+			fs.writeFile(file, result, 'utf8', function (err) {
+				 if (err) {
+					return console.log(err);
+				}
+			});
+		}
+	});
+};
   
 ControllerGenerator.prototype.getProjectObject = function getProjectObject(projectName)
 {

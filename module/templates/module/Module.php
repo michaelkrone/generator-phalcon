@@ -19,7 +19,8 @@ use \Phalcon\Loader,
 class Module extends ApplicationModule
 {
 	/**
-	 * Mount the module specific routes before the module is loaded
+	 * Mount the module specific routes before the module is loaded.
+	 * Add ModuleRoutes Group and annotated controllers for parsing their routing information.
 	 *
 	 * @param \Phalcon\DiInterface  $di
 	 */
@@ -38,9 +39,18 @@ class Module extends ApplicationModule
 		 * Be aware that the parsing will only be triggered if the request URI matches the third
 		 * parameter of addModuleResource.
 		 */
-		$di->getRouter()
-			->mount(new ModuleRoutes())
-			->addModuleResource('<%= module.slug %>', '\<%= project.namespace %>\<%= module.namespace %>\Controllers\API\Index', '/<%= module.slug %>');
+		$router = $di->getRouter();
+		$router->mount(new ModuleRoutes());
+
+	 	/**
+	 	 * Read names of annotated controllers from the module config and add them to the router
+	 	 */
+		$moduleConfig = include __DIR__ . '/config/config.php';
+		if ( isset($moduleConfig['controllers']['annotationRouted']) ) {
+			foreach ($moduleConfig['controllers']['annotationRouted'] as $ctrl) {
+				$router->addModuleResource('<%= module.slug %>', $ctrl, '/<%= module.slug %>');	
+			}
+		}
 	}
 
 	/**

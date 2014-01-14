@@ -9,5 +9,10 @@ return new \Phalcon\Config([
 		'dbname' => 'test',
 		'persistent' => true,
 		'charset' => 'utf8'
+	],
+
+	'controllers' => [
+		'annotationRouted' => [
+		]
 	]
 ]);
