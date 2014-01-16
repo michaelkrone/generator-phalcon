@@ -14,7 +14,7 @@ var PhalconGenerator = module.exports = function PhalconGenerator(args, options,
     // we assume project slug as root folder, inform the user about this fact
     console.log(
       'Please make sure this project is located in the ' +
-      (this.project.slug).yellow.bold +
+      (this.project.rewritePath).yellow.bold +
       ' directory under your webserver root!'
     );
 
@@ -65,11 +65,17 @@ PhalconGenerator.prototype.askFor = function askFor()
         }
         return true;
       }
+    },
+
+    {
+      type: 'input',
+      name: 'rewritePath',
+      message: 'Please enter the name of the folder this project lives in (defaults to the slugified project name).'
     }
   ];
 
   this.prompt(prompts, function (props) {
-    this.project = this.getProjectObject(props.projectName);
+    this.project = this.getProjectObject(props.projectName, props.rewritePath);
     this.module = this.getModuleObject(props.moduleName);
     cb();
   }.bind(this));
@@ -152,14 +158,14 @@ PhalconGenerator.prototype.getModuleObject = function getModuleObject(moduleName
   };
 };
 
-PhalconGenerator.prototype.getProjectObject = function getProjectObject(projectName)
+PhalconGenerator.prototype.getProjectObject = function getProjectObject(projectName, rewritePath)
 {
   return {
     name: projectName,
     namespace: this._.camelize(this._.capitalize(projectName)),
     slug: this._.slugify(projectName),
     camelCase: this._.camelize(projectName),
-    rewritePath: '/' + this._.slugify(projectName) + '/',
+    rewritePath: '/' + this._.slugify(rewritePath || projectName) + '/',
     layoutsDir: "__DIR__ . '/../../../public/src/app/layouts/'"
   };
 };
