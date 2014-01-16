@@ -1,6 +1,6 @@
 {
   "name": "generator-phalcon",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Let Yeoman generate a new Phalcon PHP framework multi module project. (Still under development)",
   "keywords": [
     "yeoman-generator",
