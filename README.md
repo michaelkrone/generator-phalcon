@@ -5,7 +5,7 @@ A generator for [Yeoman](http://yeoman.io). Let Yeoman generate a multi module [
 
 ## Getting Started
 
-Since this is a Yeoman generator you have to install it/him first:
+Since this is a Yeoman generator you have to install him first:
 
 ```
 $ npm install -g yo
@@ -25,7 +25,7 @@ Finally, initiate the generator:
 $ yo phalcon
 ```
 
-You will be asked some questions about your application. Finally you have a working multi-module application set up:
+You will be asked some questions about your application. You can specify the main namespace where all generated classes will live in. This will also be used to generate the project name. You can specify the folder name this project lives in (if it differs from the project name). Finally you have a working multi-module application set up:
 
 ```
 I welcome you to the Phalcon project generator.
@@ -35,6 +35,7 @@ Please answer some questions first:
                                                                                                    
 [?] How would you like to call the new Project? (Enter the global namespace of the project, eg. MyApplication)
 [?] How would you like to name the main module? (Enter the namespace of the default module, eg. MyMainModule)
+[?] Please enter the name of the folder this project lives in (defaults to the slugified project name).
                                                                                                    
 ```
 
