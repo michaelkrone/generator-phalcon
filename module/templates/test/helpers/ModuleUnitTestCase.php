@@ -31,6 +31,10 @@ abstract class ModuleUnitTestCase extends PhalconTestCase
 		$di = DI::getDefault();
         $this->application = new Application($di);
 
+		// init module
+		$module = new Module();
+		$module->registerServices($di);
+
 		// get any DI components here. If you have a config, be sure to pass it to the parent
 		parent::setUp($this->application->di, $this->application->config);
 
