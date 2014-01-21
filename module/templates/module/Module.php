@@ -119,12 +119,12 @@ class Module extends ApplicationModule
 		/**
 		 * Module specific database connection
 		 */
-		$di->set('db', function() use ($appConfig) {
+		$di->set('db', function() use ($moduleConfig) {
 			return new DbAdapter([
 				'host' => $moduleConfig->database->host,
 				'username' => $moduleConfig->database->username,
 				'password' => $moduleConfig->database->password,
-				'dbname' => $moduleConfig->database->name
+				'dbname' => $moduleConfig->database->dbname
 			]);
 		});
 	}
