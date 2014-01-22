@@ -1,6 +1,6 @@
 <?php
 
-namespace <%= project.namespace %>\<%= module.namespace %>\Controllers;
+namespace <%= project.namespace %>\<%= module.namespace %>\Library\Controllers;
 
 use <%= project.namespace %>\Application\Controllers\ApplicationController;
 

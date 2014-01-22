@@ -1,6 +1,6 @@
 <?php
 
-namespace <%= project.namespace %>\<%= module.namespace %>\Models;
+namespace <%= project.namespace %>\<%= module.namespace %>\Library\Models;
 
 use <%= project.namespace %>\Application\Models\ApplicationModel;
 

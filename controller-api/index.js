@@ -108,7 +108,6 @@ ControllerGenerator.prototype.askFor = function askFor()
 ControllerGenerator.prototype.files = function files()
 {
 	this.controllerFiles();
-	this.viewFiles();
 };
 
 /*
@@ -124,17 +123,6 @@ ControllerGenerator.prototype.controllerFiles = function controllerFiles()
   this.mkdir(dir);
   this.template('test/ControllerTest.php', dir + this.controller.name + 'ControllerTest.php');
 
-};
-
-/*
- * Create module directory structure and module specific files,
- * copy the view files to the public resources
- */
-ControllerGenerator.prototype.viewFiles = function viewFiles()
-{
-  var dir = 'public/src/app/modules/' + this.module.slug + '/views/' + this.controller.slug;
-  this.mkdir(dir);
-  this.template('views/index/index.html', dir + '/index.html');
 };
 
 /*

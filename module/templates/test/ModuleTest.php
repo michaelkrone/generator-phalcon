@@ -36,5 +36,6 @@ class ModuleTest extends ModuleUnitTestCase
 		$this->assertInstanceOf('\Phalcon\Mvc\Url', $this->application->di->get('url'));
 		$this->assertInstanceOf('\Phalcon\Mvc\Dispatcher', $this->application->di->get('dispatcher'));
 		$this->assertInstanceOf('\Phalcon\Db\AdapterInterface', $this->application->di->get('db'));
+		$this->assertInstanceOf('\Phalcon\Db\AdapterInterface', $this->application->di->get('mongoDB'));
 	}
 }

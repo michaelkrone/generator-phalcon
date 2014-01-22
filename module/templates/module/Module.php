@@ -27,12 +27,16 @@ class Module extends ApplicationModule
 	public static function initRoutes(DiInterface $di)
 	{
 		$loader = new Loader();
-		$loader->registerNamespaces([
-			'<%= project.namespace %>\<%= module.namespace %>' => __DIR__,
-			'<%= project.namespace %>\<%= module.namespace %>\Controllers' => __DIR__ . '/controllers/',
-			'<%= project.namespace %>\<%= module.namespace %>\Controllers\API' => __DIR__ . '/controllers/api/'
-			], true)
-			->register();
+		$loader->registerNamespaces(
+			[
+				'<%= project.namespace %>\<%= module.namespace %>' => __DIR__,
+				'<%= project.namespace %>\<%= module.namespace %>\Controllers' => __DIR__ . '/controllers/',
+				'<%= project.namespace %>\<%= module.namespace %>\Controllers\API' => __DIR__ . '/controllers/api/',
+				'<%= project.namespace %>\<%= module.namespace %>\Controllers\View' => __DIR__ . '/controllers/view/',
+				'<%= project.namespace %>\<%= module.namespace %>\Library\Controllers' => __DIR__ . '/lib/controllers'
+			],
+			true
+		)->register();
 
 		/**
 		 * Add ModuleRoutes Group and annotated controllers for parsing their routing information.
@@ -59,14 +63,19 @@ class Module extends ApplicationModule
 	public function registerAutoloaders()
 	{
 		$loader = new Loader();
-		$loader->registerNamespaces([
+		$loader->registerNamespaces(
+			[
 				'<%= project.namespace %>\<%= module.namespace %>' => __DIR__,
 				'<%= project.namespace %>\<%= module.namespace %>\Controllers' => __DIR__ . '/controllers/',
 				'<%= project.namespace %>\<%= module.namespace %>\Controllers\API' => __DIR__ . '/controllers/api/',
+				'<%= project.namespace %>\<%= module.namespace %>\Controllers\View' => __DIR__ . '/controllers/view/',
 				'<%= project.namespace %>\<%= module.namespace %>\Models' => __DIR__ . '/models/',
 				'<%= project.namespace %>\<%= module.namespace %>\Library' => __DIR__ . '/lib/',
-			], true)
-			->register();
+				'<%= project.namespace %>\<%= module.namespace %>\Library\Models' => __DIR__ . '/lib/models',
+				'<%= project.namespace %>\<%= module.namespace %>\Library\Controllers' => __DIR__ . '/lib/controllers'
+			],
+			true
+		)->register();
 	}
 	
 	/**
@@ -87,45 +96,71 @@ class Module extends ApplicationModule
 		/**
 		 * Setting up the view component
 		 */
-		$di->set('view', function() {
-			$view = new View();
-			$view->setViewsDir(<%= module.viewsDir %>)
-				->setLayoutsDir('../../../layouts/')
-				->setPartialsDir('../../../partials/')
-	            ->setTemplateAfter('main')
-				->registerEngines(['.html' => 'Phalcon\Mvc\View\Engine\Php']);
-			return $view;
-		});
+		$di->set(
+			'view',
+			function() {
+				$view = new View();
+				$view->setViewsDir(<%= module.viewsDir %>)
+					->setLayoutsDir('../../../layouts/')
+					->setPartialsDir('../../../partials/')
+					->setTemplateAfter('main')
+					->registerEngines(['.html' => 'Phalcon\Mvc\View\Engine\Php']);
+				return $view;
+			}
+		);
 
 		/**
 		 * The URL component is used to generate all kind of urls in the application
 		 */
-		$di->set('url', function () use ($appConfig) {
-			$url = new UrlResolver();
-			$url->setBaseUri($appConfig->application->baseUri);
-			return $url;
-		});
+		$di->set(
+			'url',
+			function () use ($appConfig) {
+				$url = new UrlResolver();
+				$url->setBaseUri($appConfig->application->baseUri);
+				return $url;
+			}
+		);
 
 		/**
 		 * Module specific dispatcher
 		 */
-		$di->set('dispatcher', function () use ($di) {
-        	$dispatcher = new Dispatcher();
-	        $dispatcher->setEventsManager($di->getShared('eventsManager'));
-			$dispatcher->setDefaultNamespace('<%= project.namespace %>\<%= module.namespace %>\\');
-			return $dispatcher;
-		});
+		$di->set(
+			'dispatcher',
+			function () use ($di) {
+				$dispatcher = new Dispatcher();
+				$dispatcher->setEventsManager($di->getShared('eventsManager'));
+				$dispatcher->setDefaultNamespace('<%= project.namespace %>\<%= module.namespace %>\\');
+				return $dispatcher;
+			}
+		);
 
 		/**
 		 * Module specific database connection
 		 */
-		$di->set('db', function() use ($moduleConfig) {
-			return new DbAdapter([
-				'host' => $moduleConfig->database->host,
-				'username' => $moduleConfig->database->username,
-				'password' => $moduleConfig->database->password,
-				'dbname' => $moduleConfig->database->dbname
-			]);
-		});
+		$di->set(
+			'db',
+			function() use ($moduleConfig) {
+				return new DbAdapter(
+					[
+						'host' => $moduleConfig->database->host,
+						'username' => $moduleConfig->database->username,
+						'password' => $moduleConfig->database->password,
+						'dbname' => $moduleConfig->database->dbname
+					]
+				);
+			}
+		);
+
+		/**
+		 * Module specific database connection
+		 */
+		$di->set(
+			'mongo',
+			function () use ($moduleConfig) {
+				$mongo = new Mongo($moduleConfig->mongoDB->connectionUrl);
+				return $mongo->selectDb($moduleConfig->mongoDB->dbname);
+			},
+			true
+		);
 	}
 }
