@@ -10,7 +10,10 @@ return new \Phalcon\Config([
 		'persistent' => true,
 		'charset' => 'utf8'
 	],
-
+	'mongoDB' => [
+		'dbname' => 'test',
+		'connectionUrl' => 'localhost'
+	],
 	'controllers' => [
 		'annotationRouted' => [
 		]

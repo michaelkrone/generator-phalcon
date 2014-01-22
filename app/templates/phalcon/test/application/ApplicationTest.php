@@ -32,6 +32,7 @@ class ApplicationTest extends UnitTestCase
 		$this->assertInstanceOf('\Phalcon\Session\Adapter', $this->application->di->get('session'));
 		$this->assertInstanceOf('\Phalcon\Mvc\Model\MetaData', $this->application->di->get('modelsMetadata'));
 		$this->assertInstanceOf('\Phalcon\Annotations\Adapter', $this->application->di->get('annotations'));
+		$this->assertInstanceOf('\Phalcon\Mvc\Collection\Manager', $this->application->di->get('collectionManager'));
 		$this->assertInstanceOf('\Phalcon\Events\Manager', $this->application->getEventsManager());
 	}
 
@@ -63,12 +64,14 @@ class ApplicationTest extends UnitTestCase
 
 		$this->assertEquals(
 			$indexCntrl->indexAction(),
-			$this->application->request([
-				'namespace' => '<%= project.namespace %>\<%= module.namespace %>\Controllers\API',
-				'module' => '<%= module.slug %>',
-				'controller' => $controllerName,
-				'action' => 'index'
-			]),
+			$this->application->request(
+				[
+					'namespace' => '<%= project.namespace %>\<%= module.namespace %>\Controllers\API',
+					'module' => '<%= module.slug %>',
+					'controller' => $controllerName,
+					'action' => 'index'
+				]
+			),
 			sprintf(
 				'Assert that calling the %s action of the %sController matches the internal HMVC request.',
 				$controllerName,
@@ -85,9 +88,11 @@ class ApplicationTest extends UnitTestCase
 	public function getController($name)
 	{
 		$loader = new Loader();
-		$loader->registerClasses([
-			'\<%= project.namespace %>\<%= module.namespace %>\Controllers\API\\' . ucfirst($name) . 'Controller' => ROOT_PATH . 'modules/<%= module.slug %>/controller/api/'
-		])->register();
+		$loader->registerClasses(
+			[
+				'\<%= project.namespace %>\<%= module.namespace %>\Controllers\API\\' . ucfirst($name) . 'Controller' => ROOT_PATH . 'modules/<%= module.slug %>/controller/api/'
+			]
+		)->register();
 
 		$indexCntrl = new \<%= project.namespace %>\<%= module.namespace %>\Controllers\API\IndexController();
 		$this->assertNotNull($indexCntrl, 'Make sure the index controller could be loaded');

@@ -14,7 +14,7 @@ var ModuleGenerator = module.exports = function ModuleGenerator(args, options, c
 		console.log('The module ' + (this.module.slug).yellow.bold + ' has been created.');
 
 		// call controller generator
-	    this.invoke('phalcon:controller', {
+	    this.invoke('phalcon:controller-view', {
 	      options: {
 	        'skip-install': true,
 	        'moduleName': this.module.name,
@@ -22,6 +22,16 @@ var ModuleGenerator = module.exports = function ModuleGenerator(args, options, c
 	        'controllerName': 'Index'
 	      }
 	    });
+
+		// call controller generator
+		this.invoke('phalcon:controller-api', {
+			options: {
+				'skip-install': true,
+				'moduleName': this.module.name,
+				'projectName': this.project.name,
+				'controllerName': 'Index'
+			}
+		});
 	});
 	
 	console.log(

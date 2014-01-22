@@ -19,13 +19,19 @@ set_include_path(
 $loader = new \Phalcon\Loader();
 $loader->registerNamespaces([
     'Phalcon\Test' => ROOT_PATH . 'test/phalcon/',
-    '<%= project.namespace %>\Application' => ROOT_PATH . 'private/common/lib/application/',
-    '<%= project.namespace %>\Application\Controllers' => ROOT_PATH . 'private/common/lib/application/controllers/',
-    '<%= project.namespace %>\Test\Helper' => ROOT_PATH . 'test/helpers/',
-    '<%= project.namespace %>\<%= module.namespace %>\Controllers\API' => ROOT_PATH . 'private/modules/<%= module.slug %>/controllers/api/',
-    '<%= project.namespace %>\<%= module.namespace %>\Controllers' => ROOT_PATH . 'private/modules/<%= module.slug %>/controllers/',
+	'<%= project.namespace %>\Test\Helper' => ROOT_PATH . 'test/helpers/',
+	'<%= project.namespace %>\Application' => ROOT_PATH . 'private/common/lib/application/',
+	'<%= project.namespace %>\Application\Controllers' => ROOT_PATH . 'private/common/lib/application/controllers/',
+	'<%= project.namespace %>\<%= module.namespace %>' => ROOT_PATH . 'private/modules/<%= module.slug %>/',
+	'<%= project.namespace %>\<%= module.namespace %>\Controllers' => ROOT_PATH . 'private/modules/<%= module.slug %>/controllers/',
+	'<%= project.namespace %>\<%= module.namespace %>\Controllers\API' => ROOT_PATH . 'private/modules/<%= module.slug %>/controllers/api/',
+	'<%= project.namespace %>\<%= module.namespace %>\Controllers\View' => ROOT_PATH . 'private/modules/<%= module.slug %>/controllers/view/',
+	'<%= project.namespace %>\<%= module.namespace %>\Models' => ROOT_PATH . 'private/modules/<%= module.slug %>/models/',
+	'<%= project.namespace %>\<%= module.namespace %>\Library' => ROOT_PATH . 'private/modules/<%= module.slug %>/lib/',
+	'<%= project.namespace %>\<%= module.namespace %>\Library\Models' => ROOT_PATH . 'private/modules/<%= module.slug %>/lib/models/',
+	'<%= project.namespace %>\<%= module.namespace %>\Library\Controllers' => ROOT_PATH . 'private/modules/<%= module.slug %>/lib/Controllers/',
     '<%= project.namespace %>\<%= module.namespace %>\Test\Helper' => ROOT_PATH . 'test/modules/<%= module.slug %>/helpers/',
-    '<%= project.namespace %>\<%= module.namespace %>' => ROOT_PATH . 'private/modules/<%= module.slug %>/'
+
 ])->register();
 
 $di = new FactoryDefault();

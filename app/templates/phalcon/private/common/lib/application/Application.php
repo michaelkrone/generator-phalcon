@@ -9,6 +9,7 @@ use \Phalcon\Mvc\Url as UrlResolver,
 	\Phalcon\Http\ResponseInterface,
 	\Phalcon\Events\Manager as EventsManager,
 	\Phalcon\Session\Adapter\Files as SessionAdapter,
+	\Phalcon\Mvc\Collection\Manager,
 	\<%= project.namespace %>\Application\Router\ApplicationRouter;
 
 /**
@@ -34,7 +35,7 @@ class Application extends \Phalcon\Mvc\Application
 		/**
 		 * Register application wide accessible services
 		 */
-		$this->_registerServices();
+		$this->registerServices();
 
 		/**
 		 * Register the installed/configured modules
@@ -46,7 +47,7 @@ class Application extends \Phalcon\Mvc\Application
 	 * Register the services here to make them general or register in the
 	 * ModuleDefinition to make them module-specific
 	 */
-	protected function _registerServices()
+	protected function registerServices()
 	{
 		/**
 		 * The application wide configuration
@@ -65,22 +66,27 @@ class Application extends \Phalcon\Mvc\Application
 		 * Register namespaces for application classes
 		 */
 		$loader = new Loader();
-		$loader->registerNamespaces([
+		$loader->registerNamespaces(
+			[
 				'<%=project.namespace %>\Application' => __DIR__,
 				'<%=project.namespace %>\Application\Controllers' => __DIR__ . '/controllers/',
 				'<%=project.namespace %>\Application\Models' => __DIR__ . '/models/',
 				'<%=project.namespace %>\Application\Router' => __DIR__ . '/router/'
-			], true)
-			->register();
+			],
+			true
+		)->register();
 
 		/**
 		 * Start the session the first time some component request the session service
 		 */
-		$this->di->set('session', function () {
-			$session = new SessionAdapter();
-			$session->start();
-			return $session;
-		});
+		$this->di->set(
+			'session',
+			function () {
+				$session = new SessionAdapter();
+				$session->start();
+				return $session;
+			}
+		);
 
 		/**
 		 * Registering the application wide router with the standard routes set
@@ -90,12 +96,26 @@ class Application extends \Phalcon\Mvc\Application
 		/**
 		 * Specify the use of metadata adapter
 		 */
-		$this->di->set('modelsMetadata', '\Phalcon\Mvc\Model\Metadata\\' . $config->application->models->metadata->adapter);
+		$this->di->set(
+			'modelsMetadata',
+			'\Phalcon\Mvc\Model\Metadata\\' . $config->application->models->metadata->adapter
+		);
 
 		/**
 		 * Specify the annotations cache adapter
 		 */
-		$this->di->set('annotations', '\Phalcon\Annotations\Adapter\\' . $config->application->annotations->adapter);
+		$this->di->set(
+			'annotations',
+			'\Phalcon\Annotations\Adapter\\' . $config->application->annotations->adapter
+		);
+
+		//Collection manager
+		$this->di->set(
+			'collectionManager',
+			function () {
+				return new Manager();
+			}
+		);
 	}
 
 	/**
@@ -118,7 +138,7 @@ class Application extends \Phalcon\Mvc\Application
 			$className = $module['className'];
 
 			if (!class_exists($className, false)) {
-				$loader->registerClasses([ $className => $module['path'] ], true)->register()->autoLoad($className);
+				$loader->registerClasses([$className => $module['path']], true)->register()->autoLoad($className);
 			}
 
 			/** @var \<%= project.namespace %>\Application\ApplicationModule $className */
@@ -134,21 +154,26 @@ class Application extends \Phalcon\Mvc\Application
 		echo $this->handle()->getContent();
 	}
 
-	 /**
-	  * Does a HMVC request inside the application
-	  *
-	  * Inside a controller we might do
-	  * <code>
-	  * $this->app->request([ 'controller' => 'do', 'action' => 'something' ], 'param');
-	  * </code>
-	  *
-	  * @param array $location Array with the route information: 'namespace', 'module', 'controller', 'action', 'params'
-	  * @return mixed
-	  */
+	/**
+	 * Does a HMVC request inside the application
+	 *
+	 * Inside a controller we might do
+	 * <code>
+	 * $this->app->request([ 'controller' => 'do', 'action' => 'something' ], 'param');
+	 * </code>
+	 *
+	 * @param array $location Array with the route information: 'namespace', 'module', 'controller', 'action', 'params'
+	 * @return mixed
+	 */
 	public function request(array $location)
 	{
 		/** @var \Phalcon\Mvc\Dispatcher $dispatcher */
 		$dispatcher = clone $this->di->get('dispatcher');
+		$defaults = [
+					'controller' => 'index',
+					'action' => 'index',
+					'params' => []
+				] + $location;
 
 		if (isset($location['module'])) {
 			$dispatcher->setModuleName($location['module']);
@@ -158,21 +183,9 @@ class Application extends \Phalcon\Mvc\Application
 			$dispatcher->setNamespaceName($location['namespace']);
 		}
 
-		if (!isset($location['controller'])) {
-			$location['controller'] = 'index';
-		}
-
-		if (!isset($location['action'])) {
-			$location['action'] = 'index';
-		}
-
-		if (!isset($location['params'])) {
-			$location['params'] = [];
-		}
-
-		$dispatcher->setControllerName($location['controller']);        	
-		$dispatcher->setActionName($location['action']);
-		$dispatcher->setParams((array) $location['params']);
+		$dispatcher->setControllerName($defaults['controller']);
+		$dispatcher->setActionName($defaults['action']);
+		$dispatcher->setParams((array)$defaults['params']);
 		$dispatcher->dispatch();
 
 		$response = $dispatcher->getReturnedValue();

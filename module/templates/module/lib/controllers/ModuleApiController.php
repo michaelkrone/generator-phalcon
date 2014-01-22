@@ -1,6 +1,6 @@
 <?php
 
-namespace <%= project.namespace %>\<%= module.namespace %>\Controllers;
+namespace <%= project.namespace %>\<%= module.namespace %>\Library\Controllers;
 
 use <%= project.namespace %>\Application\Controllers\ApplicationApiController;
 
@@ -9,5 +9,8 @@ use <%= project.namespace %>\Application\Controllers\ApplicationApiController;
  */
 class ModuleApiController extends ApplicationApiController
 {
-
+	public function beforeExecuteRoute($dispatcher)
+	{
+		$this->response->setContentType('application/json');
+	}
 }

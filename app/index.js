@@ -23,7 +23,7 @@ var PhalconGenerator = module.exports = function PhalconGenerator(args, options,
       options: {
         'skip-install': true,
         'moduleName': this.module.name,
-        'projectName': this.project.name,
+        'projectName': this.project.name
       }
     });
   });
